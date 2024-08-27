@@ -1,0 +1,42 @@
+<div
+  class="sidebar fixed top-0 left-0 h-[70px] w-screen bg-darkBg flex flex-row rounded-none overflow-hidden lg:h-screen lg:w-[103px] lg:flex-col lg:rounded-r-2xl"
+>
+  <div
+    class="relative p-4 flex justify-center items-center bg-[#7C5DFA] lg:mr-auto lg:p-8 h-[50px]"
+  >
+    <div
+      class="absolute top-1/2 left-0 w-full h-full bg-[#9277FF] transform -translate-y-1/2 lg:transform-none lg:rounded-br-2xl lg:rounded-tl-2xl"
+    ></div>
+    <img
+      src="/assets/logo.svg"
+      alt="Icon"
+      class="w-8 h-auto object-contain z-10 lg:w-10"
+    />
+  </div>
+
+  <div
+    class="content-container flex flex-row items-center justify-end ml-auto lg:mt-auto lg:flex-col lg:items-center lg:justify-start"
+  >
+    <button class="theme-swap-container p-4 lg:p-7" (click)="toggleTheme()">
+      <img
+        [src]="
+          (isDarkMode$ | async)
+            ? '/assets/icon-moon.svg'
+            : '/assets/icon-sun.svg'
+        "
+        [alt]="(isDarkMode$ | async) ? 'Light Mode' : 'Dark Mode'"
+        class="w-5 h-5 lg:w-6 lg:h-6"
+      />
+    </button>
+
+    <hr class="hidden lg:block w-full border border-gray-700 my-4" />
+
+    <div class="avatar-container p-4 lg:p-6">
+      <img
+        src="/assets/image-avatar.jpg"
+        alt="Profile"
+        class="avatar-image w-8 h-8 rounded-full lg:w-10 lg:h-10"
+      />
+    </div>
+  </div>
+</div>
