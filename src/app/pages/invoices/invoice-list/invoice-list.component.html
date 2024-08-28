@@ -20,41 +20,99 @@
           'text-darkSecondary': isDarkMode$ | async
         }"
       >
-        There are total invoices
+        There are 7 total invoices
       </p>
     </div>
-    <div class="flex items-center space-x-3">
-      <span
-        class="text-sm"
-        [ngClass]="{
-          'text-lightText': !(isDarkMode$ | async),
-          'text-darkSecondary': isDarkMode$ | async
-        }"
-      >
-        Filter by status
-      </span>
-      <img
-        src="assets/icon-arrow-down.svg"
-        alt="Arrow Down Icon"
-        class="w-4 h-3 cursor-pointer"
-      />
-    </div>
 
-    <button
-      class="flex items-center gap-3 font-bold py-2 px-1 rounded-full bg-lightAccent text-darkSecondary"
-    >
-      <span
-        class="w-6 h-6 bg-white rounded-full flex items-center justify-center"
+    <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-3 relative">
+        <span
+          class="text-sm cursor-pointer"
+          [ngClass]="{
+            'text-lightText': !(isDarkMode$ | async),
+            'text-darkSecondary': isDarkMode$ | async
+          }"
+          (mouseenter)="showDropdown()"
+          (mouseleave)="hideDropdownWithDelay()"
+        >
+          Filter by status
+        </span>
+        <img
+          [src]="
+            dropdownVisible
+              ? 'assets/icon.arrow.up.svg'
+              : 'assets/icon-arrow-down.svg'
+          "
+          alt="Arrow Down Icon"
+          class="w-4 h-3 cursor-pointer"
+          (mouseenter)="showDropdown()"
+          (mouseleave)="hideDropdownWithDelay()"
+        />
+
+        <div
+          class="absolute top-8 right-0 bg-white dark:bg-darkPrimary shadow-lg rounded-md p-4 w-48 cursor-pointer"
+          [ngClass]="{ hidden: !dropdownVisible }"
+          (mouseenter)="showDropdown()"
+          (mouseleave)="hideDropdownWithDelay()"
+        >
+          <div class="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="pending"
+              [checked]="selectedStatuses['pending']"
+              (change)="toggleStatus('pending')"
+            />
+            <label
+              for="pending"
+              class="text-sm text-lightText font-bold dark:text-white"
+              >Pending</label
+            >
+          </div>
+          <div class="flex items-center space-x-2 mt-2">
+            <input
+              type="checkbox"
+              id="paid"
+              [checked]="selectedStatuses['paid']"
+              (change)="toggleStatus('paid')"
+            />
+            <label
+              for="paid"
+              class="text-sm text-lightText font-bold dark:text-white"
+              >Paid</label
+            >
+          </div>
+          <div class="flex items-center space-x-2 mt-2">
+            <input
+              type="checkbox"
+              id="draft"
+              [checked]="selectedStatuses['draft']"
+              (change)="toggleStatus('draft')"
+            />
+            <label
+              for="draft"
+              class="text-sm text-lightText font-bold dark:text-white"
+              >Draft</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="flex items-center gap-3 font-bold py-3 px-3 rounded-full bg-lightAccent text-darkSecondary"
       >
-        <img src="assets/icon-plus.svg" alt="Add Icon" class="w-2 h-2" />
-      </span>
-      <span class="text-[10px] text-center">New Invoice</span>
-    </button>
+        <span
+          class="w-6 h-6 bg-white rounded-full flex items-center justify-center"
+        >
+          <img src="assets/icon-plus.svg" alt="Add Icon" class="w-2 h-2" />
+        </span>
+        <span class="text-sm text-center">New Invoice</span>
+      </button>
+    </div>
   </div>
 
   <ul class="space-y-4 cursor-pointer">
     <li
-      *ngFor="let invoice of invoices$ | async"
+      *ngFor="let invoice of filteredInvoices$ | async"
       class="flex justify-between items-center p-6 rounded-md shadow-md w-full"
       [ngClass]="{
         'bg-white': !(isDarkMode$ | async),
@@ -107,24 +165,26 @@
       <div
         class="flex items-center justify-center space-x-2 w-[100px] p-1 rounded-lg"
         [ngClass]="{
-          'bg-[#33d6a044]': !(isDarkMode$ | async),
-          'bg-[#33d6a055]': isDarkMode$ | async
+          'bg-[#33d6a044]': invoice.status === 'paid' && !(isDarkMode$ | async),
+          'bg-[#33d6a055]': invoice.status === 'paid' && (isDarkMode$ | async),
+          'bg-[#ff91003e]': invoice.status === 'pending',
+          'bg-[#373b5356]': invoice.status === 'draft'
         }"
       >
         <span
           class="w-2 h-2 rounded-full"
           [ngClass]="{
-            'bg-green-500': invoice.status === 'paid',
-            'bg-yellow-500': invoice.status === 'pending',
-            'bg-gray-500': invoice.status === 'draft'
+            'bg-[#33D69F]': invoice.status === 'paid',
+            'bg-[#FF8F00]': invoice.status === 'pending',
+            'bg-[#373B53]': invoice.status === 'draft'
           }"
         ></span>
         <span
           class="font-semibold"
           [ngClass]="{
-            'text-green-500': invoice.status === 'paid',
-            'text-yellow-500': invoice.status === 'pending',
-            'text-gray-500': invoice.status === 'draft'
+            'text-[#33D69F]': invoice.status === 'paid',
+            'text-[#FF8F00]': invoice.status === 'pending',
+            'text-[#373B53]': invoice.status === 'draft'
           }"
         >
           {{ invoice.status | titlecase }}
