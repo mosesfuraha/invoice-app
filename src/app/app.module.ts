@@ -3,7 +3,6 @@ import {
   BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InvoiceListComponent } from './pages/invoices/invoice-list/invoice-list.component';
@@ -13,9 +12,13 @@ import { SidebarComponent } from './pages/sidebar/sidebar.component';
 import { HomeComponent } from './pages/home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { themeReducer } from './theme/theme.reducer';
 import { ThemeEffects } from './theme/theme.effects';
+
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { HttpClientModule } from '@angular/common/http';
+import { themeReducer } from './theme/theme.reducer';
+import { invoiceReducer } from './pages/invoices/reducers/invoices.reducer';
+import { InvoiceEffects } from './pages/invoices/actions/invoice.effects';
 
 @NgModule({
   declarations: [
@@ -28,9 +31,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({ theme: themeReducer }),
-    EffectsModule.forRoot([ThemeEffects]),
+    StoreModule.forRoot({
+      theme: themeReducer,
+      invoices: invoiceReducer,
+    }),
+    EffectsModule.forRoot([ThemeEffects, InvoiceEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [provideClientHydration()],
