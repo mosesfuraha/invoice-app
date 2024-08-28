@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Actions } from '@ngrx/effects';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { tap, withLatestFrom } from 'rxjs/operators';
 import * as ThemeActions from './theme.actions';
 
 @Injectable()
 export class ThemeEffects {
-  constructor(private actions$: Actions) {
+  constructor(
+    private actions$: Actions,
+    private store: Store<{ theme: { isDarkMode: boolean } }>
+  ) {
     this.saveTheme();
   }
 
-  private getIsDarkMode(): boolean {
-    const state = JSON.parse(localStorage.getItem('appState') || '{}');
-    return state.theme?.isDarkMode ?? false;
-  }
-
   private saveTheme() {
-    this.actions$.subscribe((action) => {
-      if (
-        action.type === ThemeActions.toggleTheme.type ||
-        action.type === ThemeActions.setDarkTheme.type ||
-        action.type === ThemeActions.setLightTheme.type
-      ) {
-        const isDarkMode = this.getIsDarkMode();
-        localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
-      }
-    });
+    this.actions$
+      .pipe(
+        // Listen for theme change actions
+        ofType(
+          ThemeActions.toggleTheme,
+          ThemeActions.setDarkTheme,
+          ThemeActions.setLightTheme
+        ),
+        // Get the latest `isDarkMode` value from the store
+        withLatestFrom(this.store.select((state) => state.theme.isDarkMode)),
+        tap(([action, isDarkMode]) => {
+          localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
+        })
+      )
+      .subscribe();
   }
 }

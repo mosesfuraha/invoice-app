@@ -11,10 +11,21 @@ const initialState: ThemeState = {
 
 export const themeReducer = createReducer(
   initialState,
-  on(ThemeActions.toggleTheme, (state) => ({
-    ...state,
-    isDarkMode: !state.isDarkMode,
-  })),
+  on(ThemeActions.toggleTheme, (state) => {
+    const newIsDarkMode = !state.isDarkMode;
+
+    localStorage.setItem('isDarkMode', JSON.stringify(newIsDarkMode));
+    return {
+      ...state,
+      isDarkMode: newIsDarkMode,
+    };
+  }),
+  on(ThemeActions.setInitialTheme, (state, { isDarkMode }) => {
+    return {
+      ...state,
+      isDarkMode,
+    };
+  }),
   on(ThemeActions.setDarkTheme, (state) => ({ ...state, isDarkMode: true })),
   on(ThemeActions.setLightTheme, (state) => ({ ...state, isDarkMode: false }))
 );

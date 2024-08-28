@@ -1,7 +1,10 @@
-<div class="flex min-h-screen">
+<div
+  class="flex min-h-screen"
+  [ngClass]="(isDarkMode$ | async) ? 'bg-darkBg' : 'bg-lightBg'"
+>
   <app-sidebar class="lg:w-1/7"></app-sidebar>
 
-  <div class="flex-1 flex justify-center items-center bg-lightBg">
+  <div class="flex-1 flex justify-center mt-8">
     <app-home></app-home>
   </div>
 </div>
