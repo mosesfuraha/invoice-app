@@ -1,0 +1,11 @@
+input.invalid {
+  border-color: red;
+}
+
+small.error {
+  color: red;
+  font-size: 0.8rem;
+}
+label.error {
+  color: red;
+}

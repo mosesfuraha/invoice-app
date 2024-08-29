@@ -13,6 +13,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ThemeEffects } from './theme/theme.effects';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HttpClientModule } from '@angular/common/http';
@@ -34,6 +35,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({
       theme: themeReducer,

@@ -1,5 +1,5 @@
 <div
-  class="h-full flex flex-col justify-between"
+  class="h-full flex flex-col justify-between font-spartan"
   [ngClass]="{ dark: isDarkMode$ | async }"
 >
   <div
@@ -18,9 +18,9 @@
     >
       New Invoice
     </h2>
-
     <form
       id="invoice-form"
+      [formGroup]="invoiceForm"
       class="flex flex-col gap-4 overflow-y-auto pr-5 custom-scrollbar h-[360px]"
     >
       <div class="mb-4">
@@ -34,16 +34,38 @@
           Bill from
         </h3>
         <div class="mb-3">
-          <label
-            class="mb-3 block text-sm"
-            for="street"
-            [ngClass]="{
-              'text-lightSecondary': !(isDarkMode$ | async),
-              'text-lightBg': isDarkMode$ | async
-            }"
-          >
-            Street Address
-          </label>
+          <div class="flex justify-between items-center">
+            <label
+              class="mb-3 block text-sm"
+              for="street"
+              [ngClass]="{
+                'text-lightSecondary':
+                  !(
+                    invoiceForm.get('street')?.invalid &&
+                    invoiceForm.get('street')?.touched
+                  ) && !(isDarkMode$ | async),
+                'text-lightBg':
+                  !(
+                    invoiceForm.get('street')?.invalid &&
+                    invoiceForm.get('street')?.touched
+                  ) && (isDarkMode$ | async),
+                'text-red-500':
+                  invoiceForm.get('street')?.invalid &&
+                  invoiceForm.get('street')?.touched
+              }"
+            >
+              Street Address
+            </label>
+            <small
+              class="error text-red-500"
+              *ngIf="
+                invoiceForm.get('street')?.invalid &&
+                invoiceForm.get('street')?.touched
+              "
+            >
+              can't be empty
+            </small>
+          </div>
           <input
             class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
             [ngClass]="{
@@ -51,25 +73,54 @@
                 isDarkMode$ | async
               ),
               'border-darkText bg-darkInput text-darkSecondary':
-                isDarkMode$ | async
+                (isDarkMode$ | async),
+              'border-red-500':
+                invoiceForm.get('street')?.invalid &&
+                invoiceForm.get('street')?.touched
             }"
             type="text"
-            name="street"
+            formControlName="street"
+            [class.invalid]="
+              invoiceForm.get('street')?.invalid &&
+              invoiceForm.get('street')?.touched
+            "
           />
         </div>
 
         <div class="flex flex-wrap gap-4">
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="city"
-            >
-              City
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary':
+                    !(
+                      invoiceForm.get('city')?.invalid &&
+                      invoiceForm.get('city')?.touched
+                    ) && !(isDarkMode$ | async),
+                  'text-lightBg':
+                    !(
+                      invoiceForm.get('city')?.invalid &&
+                      invoiceForm.get('city')?.touched
+                    ) && (isDarkMode$ | async),
+                  'text-red-500':
+                    invoiceForm.get('city')?.invalid &&
+                    invoiceForm.get('city')?.touched
+                }"
+                for="city"
+              >
+                City
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('city')?.invalid &&
+                  invoiceForm.get('city')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -77,24 +128,53 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  (isDarkMode$ | async),
+                'border-red-500':
+                  invoiceForm.get('city')?.invalid &&
+                  invoiceForm.get('city')?.touched
               }"
               type="text"
-              name="city"
+              formControlName="city"
+              [class.invalid]="
+                invoiceForm.get('city')?.invalid &&
+                invoiceForm.get('city')?.touched
+              "
             />
           </div>
 
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="postCode"
-            >
-              Post Code
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary':
+                    !(
+                      invoiceForm.get('postCode')?.invalid &&
+                      invoiceForm.get('postCode')?.touched
+                    ) && !(isDarkMode$ | async),
+                  'text-lightBg':
+                    !(
+                      invoiceForm.get('postCode')?.invalid &&
+                      invoiceForm.get('postCode')?.touched
+                    ) && (isDarkMode$ | async),
+                  'text-red-500':
+                    invoiceForm.get('postCode')?.invalid &&
+                    invoiceForm.get('postCode')?.touched
+                }"
+                for="postCode"
+              >
+                Post Code
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('postCode')?.invalid &&
+                  invoiceForm.get('postCode')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -102,24 +182,53 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  (isDarkMode$ | async),
+                'border-red-500':
+                  invoiceForm.get('postCode')?.invalid &&
+                  invoiceForm.get('postCode')?.touched
               }"
               type="text"
-              name="postCode"
+              formControlName="postCode"
+              [class.invalid]="
+                invoiceForm.get('postCode')?.invalid &&
+                invoiceForm.get('postCode')?.touched
+              "
             />
           </div>
 
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="country"
-            >
-              Country
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary':
+                    !(
+                      invoiceForm.get('country')?.invalid &&
+                      invoiceForm.get('country')?.touched
+                    ) && !(isDarkMode$ | async),
+                  'text-lightBg':
+                    !(
+                      invoiceForm.get('country')?.invalid &&
+                      invoiceForm.get('country')?.touched
+                    ) && (isDarkMode$ | async),
+                  'text-red-500':
+                    invoiceForm.get('country')?.invalid &&
+                    invoiceForm.get('country')?.touched
+                }"
+                for="country"
+              >
+                Country
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('country')?.invalid &&
+                  invoiceForm.get('country')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -127,10 +236,17 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  (isDarkMode$ | async),
+                'border-red-500':
+                  invoiceForm.get('country')?.invalid &&
+                  invoiceForm.get('country')?.touched
               }"
               type="text"
-              name="country"
+              formControlName="country"
+              [class.invalid]="
+                invoiceForm.get('country')?.invalid &&
+                invoiceForm.get('country')?.touched
+              "
             />
           </div>
         </div>
@@ -146,17 +262,32 @@
         >
           Bill to
         </h3>
+
         <div class="mb-3">
-          <label
-            class="text-lightSecondary mb-1 block text-sm"
-            [ngClass]="{
-              'text-lightSecondary': !(isDarkMode$ | async),
-              'text-lightBg': isDarkMode$ | async
-            }"
-            for="clientName"
-          >
-            Client's Name
-          </label>
+          <div class="flex justify-between items-center">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async,
+                'text-red-500':
+                  invoiceForm.get('clientName')?.invalid &&
+                  invoiceForm.get('clientName')?.touched
+              }"
+              for="clientName"
+            >
+              Client's Name
+            </label>
+            <small
+              class="error text-red-500"
+              *ngIf="
+                invoiceForm.get('clientName')?.invalid &&
+                invoiceForm.get('clientName')?.touched
+              "
+            >
+              can't be empty
+            </small>
+          </div>
           <input
             class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
             [ngClass]="{
@@ -164,24 +295,45 @@
                 isDarkMode$ | async
               ),
               'border-darkText bg-darkInput text-darkSecondary':
-                isDarkMode$ | async
+                isDarkMode$ | async,
+              'border-red-500':
+                invoiceForm.get('clientName')?.invalid &&
+                invoiceForm.get('clientName')?.touched
             }"
             type="text"
-            name="clientName"
+            formControlName="clientName"
+            [class.invalid]="
+              invoiceForm.get('clientName')?.invalid &&
+              invoiceForm.get('clientName')?.touched
+            "
           />
         </div>
 
         <div class="mb-3">
-          <label
-            class="text-lightSecondary mb-1 block text-sm"
-            [ngClass]="{
-              'text-lightSecondary': !(isDarkMode$ | async),
-              'text-lightBg': isDarkMode$ | async
-            }"
-            for="clientEmail"
-          >
-            Client's Email
-          </label>
+          <div class="flex justify-between items-center">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async,
+                'text-red-500':
+                  invoiceForm.get('clientEmail')?.invalid &&
+                  invoiceForm.get('clientEmail')?.touched
+              }"
+              for="clientEmail"
+            >
+              Client's Email
+            </label>
+            <small
+              class="error text-red-500"
+              *ngIf="
+                invoiceForm.get('clientEmail')?.invalid &&
+                invoiceForm.get('clientEmail')?.touched
+              "
+            >
+              A valid email is required
+            </small>
+          </div>
           <input
             class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
             [ngClass]="{
@@ -189,25 +341,46 @@
                 isDarkMode$ | async
               ),
               'border-darkText bg-darkInput text-darkSecondary':
-                isDarkMode$ | async
+                isDarkMode$ | async,
+              'border-red-500':
+                invoiceForm.get('clientEmail')?.invalid &&
+                invoiceForm.get('clientEmail')?.touched
             }"
             type="email"
             placeholder="e.g. email@example.com"
-            name="clientEmail"
+            formControlName="clientEmail"
+            [class.invalid]="
+              invoiceForm.get('clientEmail')?.invalid &&
+              invoiceForm.get('clientEmail')?.touched
+            "
           />
         </div>
 
         <div class="mb-3">
-          <label
-            class="text-lightSecondary mb-1 block text-sm"
-            [ngClass]="{
-              'text-lightSecondary': !(isDarkMode$ | async),
-              'text-lightBg': isDarkMode$ | async
-            }"
-            for="street"
-          >
-            Street Address
-          </label>
+          <div class="flex justify-between items-center">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async,
+                'text-red-500':
+                  invoiceForm.get('street')?.invalid &&
+                  invoiceForm.get('street')?.touched
+              }"
+              for="street"
+            >
+              Street Address
+            </label>
+            <small
+              class="error text-red-500"
+              *ngIf="
+                invoiceForm.get('street')?.invalid &&
+                invoiceForm.get('street')?.touched
+              "
+            >
+              can't be empty
+            </small>
+          </div>
           <input
             class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
             [ngClass]="{
@@ -215,25 +388,46 @@
                 isDarkMode$ | async
               ),
               'border-darkText bg-darkInput text-darkSecondary':
-                isDarkMode$ | async
+                isDarkMode$ | async,
+              'border-red-500':
+                invoiceForm.get('street')?.invalid &&
+                invoiceForm.get('street')?.touched
             }"
             type="text"
-            name="street"
+            formControlName="street"
+            [class.invalid]="
+              invoiceForm.get('street')?.invalid &&
+              invoiceForm.get('street')?.touched
+            "
           />
         </div>
 
         <div class="flex flex-wrap gap-4">
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="city"
-            >
-              City
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('city')?.invalid &&
+                    invoiceForm.get('city')?.touched
+                }"
+                for="city"
+              >
+                City
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('city')?.invalid &&
+                  invoiceForm.get('city')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -241,24 +435,45 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('city')?.invalid &&
+                  invoiceForm.get('city')?.touched
               }"
               type="text"
-              name="city"
+              formControlName="city"
+              [class.invalid]="
+                invoiceForm.get('city')?.invalid &&
+                invoiceForm.get('city')?.touched
+              "
             />
           </div>
 
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="postCode"
-            >
-              Post Code
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('postCode')?.invalid &&
+                    invoiceForm.get('postCode')?.touched
+                }"
+                for="postCode"
+              >
+                Post Code
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('postCode')?.invalid &&
+                  invoiceForm.get('postCode')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -266,24 +481,45 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('postCode')?.invalid &&
+                  invoiceForm.get('postCode')?.touched
               }"
               type="text"
-              name="postCode"
+              formControlName="postCode"
+              [class.invalid]="
+                invoiceForm.get('postCode')?.invalid &&
+                invoiceForm.get('postCode')?.touched
+              "
             />
           </div>
 
           <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-1 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="country"
-            >
-              Country
-            </label>
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('country')?.invalid &&
+                    invoiceForm.get('country')?.touched
+                }"
+                for="country"
+              >
+                Country
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('country')?.invalid &&
+                  invoiceForm.get('country')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
             <input
               class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
               [ngClass]="{
@@ -291,10 +527,162 @@
                   isDarkMode$ | async
                 ),
                 'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('country')?.invalid &&
+                  invoiceForm.get('country')?.touched
               }"
               type="text"
-              name="country"
+              formControlName="country"
+              [class.invalid]="
+                invoiceForm.get('country')?.invalid &&
+                invoiceForm.get('country')?.touched
+              "
+            />
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <div class="flex flex-wrap gap-4 w-full">
+          <div class="flex-1 min-w-[100px] mb-3">
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('invoiceDate')?.invalid &&
+                    invoiceForm.get('invoiceDate')?.touched
+                }"
+                for="invoiceDate"
+              >
+                Invoice Date
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('invoiceDate')?.invalid &&
+                  invoiceForm.get('invoiceDate')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('invoiceDate')?.invalid &&
+                  invoiceForm.get('invoiceDate')?.touched
+              }"
+              type="date"
+              formControlName="invoiceDate"
+              [class.invalid]="
+                invoiceForm.get('invoiceDate')?.invalid &&
+                invoiceForm.get('invoiceDate')?.touched
+              "
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('paymentTerms')?.invalid &&
+                    invoiceForm.get('paymentTerms')?.touched
+                }"
+                for="paymentTerms"
+              >
+                Payment Terms
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('paymentTerms')?.invalid &&
+                  invoiceForm.get('paymentTerms')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
+            <select
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('paymentTerms')?.invalid &&
+                  invoiceForm.get('paymentTerms')?.touched
+              }"
+              formControlName="paymentTerms"
+              [class.invalid]="
+                invoiceForm.get('paymentTerms')?.invalid &&
+                invoiceForm.get('paymentTerms')?.touched
+              "
+            >
+              <option value="net30">Net 30</option>
+              <option value="net60">Net 60</option>
+              <option value="net90">Net 90</option>
+            </select>
+          </div>
+
+          <div class="w-full mb-3">
+            <div class="flex justify-between items-center">
+              <label
+                class="text-lightSecondary mb-1 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    invoiceForm.get('description')?.invalid &&
+                    invoiceForm.get('description')?.touched
+                }"
+                for="description"
+              >
+                Project Description
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  invoiceForm.get('description')?.invalid &&
+                  invoiceForm.get('description')?.touched
+                "
+              >
+                can't be empty
+              </small>
+            </div>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async,
+                'border-red-500':
+                  invoiceForm.get('description')?.invalid &&
+                  invoiceForm.get('description')?.touched
+              }"
+              type="text"
+              placeholder="e.g. Graphic Design Service"
+              formControlName="description"
+              [class.invalid]="
+                invoiceForm.get('description')?.invalid &&
+                invoiceForm.get('description')?.touched
+              "
             />
           </div>
         </div>
@@ -303,6 +691,7 @@
       <div class="mb-8">
         <h3
           class="text-xl font-semibold mb-4"
+          *ngIf="items.controls.length > 0"
           [ngClass]="{
             'text-lightAccent': !(isDarkMode$ | async),
             'text-darkAccent': isDarkMode$ | async
@@ -310,112 +699,177 @@
         >
           Item List
         </h3>
-        <div class="flex flex-wrap gap-4 items-end">
-          <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-3 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="itemName"
-            >
-              Item Name
-            </label>
-            <input
-              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
-              [ngClass]="{
-                'border-lightSecondary bg-lightBg text-lightText': !(
-                  isDarkMode$ | async
-                ),
-                'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
-              }"
-              type="text"
-              name="itemName"
-            />
-          </div>
 
-          <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-3 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightText': isDarkMode$ | async
-              }"
-              for="qty"
-            >
-              Qty
-            </label>
-            <input
-              class="w-[60%] p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
-              [ngClass]="{
-                'border-lightSecondary bg-lightBg text-lightText': !(
-                  isDarkMode$ | async
-                ),
-                'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
-              }"
-              type="number"
-              name="qty"
-            />
-          </div>
-
-          <div class="flex-1 min-w-[100px] mb-3">
-            <label
-              class="text-lightSecondary mb-3 block text-sm"
-              [ngClass]="{
-                'text-lightSecondary': !(isDarkMode$ | async),
-                'text-lightBg': isDarkMode$ | async
-              }"
-              for="price"
-            >
-              Price
-            </label>
-            <input
-              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
-              [ngClass]="{
-                'border-lightSecondary bg-lightBg text-lightText': !(
-                  isDarkMode$ | async
-                ),
-                'border-darkText bg-darkInput text-darkSecondary':
-                  isDarkMode$ | async
-              }"
-              type="number"
-              name="price"
-            />
-          </div>
-
-          <div class="flex flex-1 items-center min-w-[100px] mb-3">
-            <div class="flex-grow">
+        <div formArrayName="items" *ngIf="items.controls.length > 0">
+          <div
+            class="flex flex-wrap gap-4 items-end"
+            *ngFor="let item of items.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="flex-1 min-w-[100px] mb-3">
               <label
                 class="text-lightSecondary mb-3 block text-sm"
                 [ngClass]="{
                   'text-lightSecondary': !(isDarkMode$ | async),
-                  'text-lightBg': isDarkMode$ | async
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    item.get('itemName')?.invalid &&
+                    item.get('itemName')?.touched
                 }"
-                for="total"
+                for="itemName"
               >
-                Total
+                Item Name
               </label>
-              <div
-                class="w-full p-2 rounded-md border-none bg-none text-sm font-bold focus:outline-none transition duration-400"
-                [ngClass]="{
-                  'text-lightText': !(isDarkMode$ | async),
-                  'bg-none text-darkSecondary': isDarkMode$ | async
-                }"
+              <small
+                class="error text-red-500"
+                *ngIf="
+                  item.get('itemName')?.invalid && item.get('itemName')?.touched
+                "
               >
-                454.00
-              </div>
+                can't be empty
+              </small>
+              <input
+                class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+                [ngClass]="{
+                  'border-lightSecondary bg-lightBg text-lightText': !(
+                    isDarkMode$ | async
+                  ),
+                  'border-darkText bg-darkInput text-darkSecondary':
+                    isDarkMode$ | async,
+                  'border-red-500':
+                    item.get('itemName')?.invalid &&
+                    item.get('itemName')?.touched
+                }"
+                type="text"
+                formControlName="itemName"
+                [class.invalid]="
+                  item.get('itemName')?.invalid && item.get('itemName')?.touched
+                "
+              />
             </div>
 
-            <img
-              src="assets/icon-delete.svg"
-              alt="Delete Item"
-              class="w-5 h-5 cursor-pointer"
-            />
+            <div class="flex-1 min-w-[100px] mb-3">
+              <label
+                class="text-lightSecondary mb-3 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightText': isDarkMode$ | async,
+                  'text-red-500':
+                    item.get('qty')?.invalid && item.get('qty')?.touched
+                }"
+                for="qty"
+              >
+                Qty
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="item.get('qty')?.invalid && item.get('qty')?.touched"
+              >
+                can't be empty
+              </small>
+              <input
+                class="w-[60%] p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+                [ngClass]="{
+                  'border-lightSecondary bg-lightBg text-lightText': !(
+                    isDarkMode$ | async
+                  ),
+                  'border-darkText bg-darkInput text-darkSecondary':
+                    isDarkMode$ | async,
+                  'border-red-500':
+                    item.get('qty')?.invalid && item.get('qty')?.touched
+                }"
+                type="number"
+                formControlName="qty"
+                [class.invalid]="
+                  item.get('qty')?.invalid && item.get('qty')?.touched
+                "
+              />
+            </div>
+
+            <div class="flex-1 min-w-[100px] mb-3">
+              <label
+                class="text-lightSecondary mb-3 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async,
+                  'text-red-500':
+                    item.get('price')?.invalid && item.get('price')?.touched
+                }"
+                for="price"
+              >
+                Price
+              </label>
+              <small
+                class="error text-red-500"
+                *ngIf="item.get('price')?.invalid && item.get('price')?.touched"
+              >
+                can't be empty
+              </small>
+              <input
+                class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+                [ngClass]="{
+                  'border-lightSecondary bg-lightBg text-lightText': !(
+                    isDarkMode$ | async
+                  ),
+                  'border-darkText bg-darkInput text-darkSecondary':
+                    isDarkMode$ | async,
+                  'border-red-500':
+                    item.get('price')?.invalid && item.get('price')?.touched
+                }"
+                type="number"
+                formControlName="price"
+                [class.invalid]="
+                  item.get('price')?.invalid && item.get('price')?.touched
+                "
+              />
+            </div>
+
+            <div class="flex flex-1 items-center min-w-[100px] mb-3">
+              <div class="flex-grow">
+                <label
+                  class="text-lightSecondary mb-3 block text-sm"
+                  [ngClass]="{
+                    'text-lightSecondary': !(isDarkMode$ | async),
+                    'text-lightBg': isDarkMode$ | async
+                  }"
+                  for="total"
+                >
+                  Total
+                </label>
+                <div
+                  class="w-full p-2 rounded-md border-none bg-none text-sm font-bold focus:outline-none transition duration-400"
+                  [ngClass]="{
+                    'text-lightText': !(isDarkMode$ | async),
+                    'bg-none text-darkSecondary': isDarkMode$ | async
+                  }"
+                >
+                  {{ item.get("total")?.value }}
+                </div>
+              </div>
+
+              <img
+                src="assets/icon-delete.svg"
+                alt="Delete Item"
+                class="w-5 h-5 cursor-pointer"
+                (click)="removeItem(i)"
+              />
+            </div>
           </div>
         </div>
+
+        <button
+          type="button"
+          class="py-2 px-4 rounded-full transition duration-300 w-full"
+          [ngClass]="{
+            'bg-lightText text-lightSecondary hover:bg-black': !(
+              isDarkMode$ | async
+            ),
+            'bg-darkInput text-lightBg hover:bg-black': isDarkMode$ | async
+          }"
+          (click)="addItem()"
+        >
+          + Add New Item
+        </button>
       </div>
     </form>
 
