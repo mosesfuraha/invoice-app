@@ -3,7 +3,7 @@
   [ngClass]="{ dark: isDarkMode$ | async }"
 >
   <div
-    class="w-[600px] h-full p-6 rounded-lg"
+    class="w-[600px] h-full p-6 rounded-tr-lg rounded-br-lg"
     [ngClass]="{
       'bg-lightBg': !(isDarkMode$ | async),
       'bg-lightText': isDarkMode$ | async
@@ -861,7 +861,7 @@
           type="button"
           class="py-2 px-4 rounded-full transition duration-300 w-full"
           [ngClass]="{
-            'bg-lightText text-lightSecondary hover:bg-black': !(
+            'bg-[#DFE3FA] text-lightSecondary hover:bg-black': !(
               isDarkMode$ | async
             ),
             'bg-darkInput text-lightBg hover:bg-black': isDarkMode$ | async
@@ -891,6 +891,7 @@
       </button>
       <div class="flex gap-4">
         <button
+          (click)="onSubmit()"
           class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-lightText text-lightSecondary': !(isDarkMode$ | async),

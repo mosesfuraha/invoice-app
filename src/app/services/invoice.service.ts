@@ -14,4 +14,8 @@ export class InvoiceService {
   findAllInvoices(): Observable<Invoice[]> {
     return this.http.get<Invoice[]>(this.dataUrl);
   }
+
+  addInvoice(invoice: Invoice): Observable<Invoice> {
+    return this.http.post<Invoice>(this.dataUrl, invoice);
+  }
 }
