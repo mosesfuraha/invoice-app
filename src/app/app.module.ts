@@ -19,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { themeReducer } from './theme/theme.reducer';
 import { invoiceReducer } from './pages/invoices/reducers/invoices.reducer';
 import { InvoiceEffects } from './pages/invoices/actions/invoice.effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { InvoiceEffects } from './pages/invoices/actions/invoice.effects';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     StoreModule.forRoot({
       theme: themeReducer,
       invoices: invoiceReducer,

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { InvoiceService } from '../../../services/invoice.service';
 import { InvoiceActions } from './invoice.types';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { Action } from '@ngrx/store';
 
 @Injectable()
 export class InvoiceEffects {
@@ -13,9 +12,9 @@ export class InvoiceEffects {
     private invoiceService: InvoiceService
   ) {}
 
-  loadInvoices$ = createEffect((): Observable<Action> => {
-    return new Observable((observer) => {
-      this.actions$.subscribe((action: Action) => {
+  loadInvoices$ = createEffect(() => {
+    return new Observable<Action>((observer) => {
+      this.actions$.subscribe((action) => {
         if (action.type === InvoiceActions.loadAllInvoices.type) {
           this.invoiceService.findAllInvoices().subscribe(
             (invoices) => {

@@ -1,1 +1,460 @@
-<p>invoice-form works!</p>
+<div
+  class="h-full flex flex-col justify-between"
+  [ngClass]="{ dark: isDarkMode$ | async }"
+>
+  <div
+    class="w-[600px] h-full p-6 rounded-lg"
+    [ngClass]="{
+      'bg-lightBg': !(isDarkMode$ | async),
+      'bg-lightText': isDarkMode$ | async
+    }"
+  >
+    <h2
+      class="text-2xl font-bold mb-4"
+      [ngClass]="{
+        'text-lightText': !(isDarkMode$ | async),
+        'text-darkSecondary': isDarkMode$ | async
+      }"
+    >
+      New Invoice
+    </h2>
+
+    <form
+      id="invoice-form"
+      class="flex flex-col gap-4 overflow-y-auto pr-5 custom-scrollbar h-[360px]"
+    >
+      <div class="mb-4">
+        <h3
+          class="text-xl font-semibold mb-8"
+          [ngClass]="{
+            'text-lightAccent': !(isDarkMode$ | async),
+            'text-darkAccent': isDarkMode$ | async
+          }"
+        >
+          Bill from
+        </h3>
+        <div class="mb-3">
+          <label
+            class="mb-3 block text-sm"
+            for="street"
+            [ngClass]="{
+              'text-lightSecondary': !(isDarkMode$ | async),
+              'text-lightBg': isDarkMode$ | async
+            }"
+          >
+            Street Address
+          </label>
+          <input
+            class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+            [ngClass]="{
+              'border-lightSecondary bg-lightBg text-lightText': !(
+                isDarkMode$ | async
+              ),
+              'border-darkText bg-darkInput text-darkSecondary':
+                isDarkMode$ | async
+            }"
+            type="text"
+            name="street"
+          />
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="city"
+            >
+              City
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="city"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="postCode"
+            >
+              Post Code
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="postCode"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="country"
+            >
+              Country
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="country"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <h3
+          class="text-xl font-semibold mb-4"
+          [ngClass]="{
+            'text-lightAccent': !(isDarkMode$ | async),
+            'text-darkAccent': isDarkMode$ | async
+          }"
+        >
+          Bill to
+        </h3>
+        <div class="mb-3">
+          <label
+            class="text-lightSecondary mb-1 block text-sm"
+            [ngClass]="{
+              'text-lightSecondary': !(isDarkMode$ | async),
+              'text-lightBg': isDarkMode$ | async
+            }"
+            for="clientName"
+          >
+            Client's Name
+          </label>
+          <input
+            class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+            [ngClass]="{
+              'border-lightSecondary bg-lightBg text-lightText': !(
+                isDarkMode$ | async
+              ),
+              'border-darkText bg-darkInput text-darkSecondary':
+                isDarkMode$ | async
+            }"
+            type="text"
+            name="clientName"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label
+            class="text-lightSecondary mb-1 block text-sm"
+            [ngClass]="{
+              'text-lightSecondary': !(isDarkMode$ | async),
+              'text-lightBg': isDarkMode$ | async
+            }"
+            for="clientEmail"
+          >
+            Client's Email
+          </label>
+          <input
+            class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+            [ngClass]="{
+              'border-lightSecondary bg-lightBg text-lightText': !(
+                isDarkMode$ | async
+              ),
+              'border-darkText bg-darkInput text-darkSecondary':
+                isDarkMode$ | async
+            }"
+            type="email"
+            placeholder="e.g. email@example.com"
+            name="clientEmail"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label
+            class="text-lightSecondary mb-1 block text-sm"
+            [ngClass]="{
+              'text-lightSecondary': !(isDarkMode$ | async),
+              'text-lightBg': isDarkMode$ | async
+            }"
+            for="street"
+          >
+            Street Address
+          </label>
+          <input
+            class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+            [ngClass]="{
+              'border-lightSecondary bg-lightBg text-lightText': !(
+                isDarkMode$ | async
+              ),
+              'border-darkText bg-darkInput text-darkSecondary':
+                isDarkMode$ | async
+            }"
+            type="text"
+            name="street"
+          />
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="city"
+            >
+              City
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="city"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="postCode"
+            >
+              Post Code
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="postCode"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-1 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="country"
+            >
+              Country
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="country"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <h3
+          class="text-xl font-semibold mb-4"
+          [ngClass]="{
+            'text-lightAccent': !(isDarkMode$ | async),
+            'text-darkAccent': isDarkMode$ | async
+          }"
+        >
+          Item List
+        </h3>
+        <div class="flex flex-wrap gap-4 items-end">
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-3 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="itemName"
+            >
+              Item Name
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="text"
+              name="itemName"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-3 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightText': isDarkMode$ | async
+              }"
+              for="qty"
+            >
+              Qty
+            </label>
+            <input
+              class="w-[60%] p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="number"
+              name="qty"
+            />
+          </div>
+
+          <div class="flex-1 min-w-[100px] mb-3">
+            <label
+              class="text-lightSecondary mb-3 block text-sm"
+              [ngClass]="{
+                'text-lightSecondary': !(isDarkMode$ | async),
+                'text-lightBg': isDarkMode$ | async
+              }"
+              for="price"
+            >
+              Price
+            </label>
+            <input
+              class="w-full p-2 rounded-md border bg-lightBg text-sm font-bold focus:border-lightAccent focus:outline-none transition duration-400"
+              [ngClass]="{
+                'border-lightSecondary bg-lightBg text-lightText': !(
+                  isDarkMode$ | async
+                ),
+                'border-darkText bg-darkInput text-darkSecondary':
+                  isDarkMode$ | async
+              }"
+              type="number"
+              name="price"
+            />
+          </div>
+
+          <div class="flex flex-1 items-center min-w-[100px] mb-3">
+            <div class="flex-grow">
+              <label
+                class="text-lightSecondary mb-3 block text-sm"
+                [ngClass]="{
+                  'text-lightSecondary': !(isDarkMode$ | async),
+                  'text-lightBg': isDarkMode$ | async
+                }"
+                for="total"
+              >
+                Total
+              </label>
+              <div
+                class="w-full p-2 rounded-md border-none bg-none text-sm font-bold focus:outline-none transition duration-400"
+                [ngClass]="{
+                  'text-lightText': !(isDarkMode$ | async),
+                  'bg-none text-darkSecondary': isDarkMode$ | async
+                }"
+              >
+                454.00
+              </div>
+            </div>
+
+            <img
+              src="assets/icon-delete.svg"
+              alt="Delete Item"
+              class="w-5 h-5 cursor-pointer"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div
+      class="flex justify-between gap-4 mt-4 shadow-lg p-3 rounded-lg"
+      [ngClass]="{
+        'bg-lightBg': !(isDarkMode$ | async),
+        'bg-darkPrimary': isDarkMode$ | async
+      }"
+    >
+      <button
+        class="py-3 px-6 rounded-full hover:bg-opacity-75 transition duration-300"
+        [ngClass]="{
+          'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
+          'bg-darkSecondary text-darkText': isDarkMode$ | async
+        }"
+      >
+        Discard
+      </button>
+      <div class="flex gap-4">
+        <button
+          class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+          [ngClass]="{
+            'bg-lightText text-lightSecondary': !(isDarkMode$ | async),
+            'bg-darkText text-darkSecondary': isDarkMode$ | async
+          }"
+        >
+          Save as Draft
+        </button>
+        <button
+          class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+          [ngClass]="{
+            'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),
+            'bg-darkAccent text-darkText': isDarkMode$ | async
+          }"
+        >
+          Save & Send
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

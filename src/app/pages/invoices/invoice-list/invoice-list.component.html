@@ -44,7 +44,7 @@
               : 'assets/icon-arrow-down.svg'
           "
           alt="Arrow Down Icon"
-          class="w-4 h-3 cursor-pointer"
+          class="w-3 h-2 cursor-pointer"
           (mouseenter)="showDropdown()"
           (mouseleave)="hideDropdownWithDelay()"
         />
@@ -99,6 +99,7 @@
 
       <button
         class="flex items-center gap-3 font-bold py-3 px-3 rounded-full bg-lightAccent text-darkSecondary"
+        (click)="toggleForm()"
       >
         <span
           class="w-6 h-6 bg-white rounded-full flex items-center justify-center"
@@ -194,4 +195,12 @@
       <img src="assets/icon-arrow-right.svg" alt="arrow-right" />
     </li>
   </ul>
+</div>
+
+<div
+  [@slideInOut]="showForm ? 'in' : 'out'"
+  class="fixed top-0 left-20 p-8 bg-black bg-opacity-50 z-40 w-full ml-4"
+  [style.display]="showForm ? 'block' : 'none'"
+>
+  <app-invoice-form (formClose)="toggleForm()"></app-invoice-form>
 </div>
