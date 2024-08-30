@@ -8,6 +8,7 @@ import {
   style,
   transition,
   animate,
+  keyframes,
 } from '@angular/animations';
 
 import { Invoice } from '../../../models/invoice';
@@ -24,16 +25,40 @@ import { InvoiceState, selectAll } from '../reducers/invoices.reducer';
         'in',
         style({
           transform: 'translateX(0)',
+          opacity: 1,
         })
       ),
       state(
         'out',
         style({
           transform: 'translateX(-100%)',
+          opacity: 0,
         })
       ),
-      transition('out => in', animate('300ms ease-in')),
-      transition('in => out', animate('300ms ease-out')),
+      transition('out => in', [
+        animate(
+          '500ms ease-in-out',
+          keyframes([
+            style({ transform: 'translateX(-100%)', opacity: 0, offset: 0 }),
+            style({ transform: 'translateX(10px)', opacity: 0.5, offset: 0.8 }),
+            style({ transform: 'translateX(0)', opacity: 1, offset: 1 }),
+          ])
+        ),
+      ]),
+      transition('in => out', [
+        animate(
+          '400ms ease-in-out',
+          keyframes([
+            style({ transform: 'translateX(0)', opacity: 1, offset: 0 }),
+            style({
+              transform: 'translateX(-10px)',
+              opacity: 0.5,
+              offset: 0.2,
+            }),
+            style({ transform: 'translateX(-100%)', opacity: 0, offset: 1 }),
+          ])
+        ),
+      ]),
     ]),
   ],
 })
@@ -102,4 +127,8 @@ export class InvoiceListComponent implements OnInit {
   toggleForm(): void {
     this.showForm = !this.showForm;
   }
+  closeForm(): void {
+    this.showForm = false;
+  }
+  
 }

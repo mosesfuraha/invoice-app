@@ -901,6 +901,7 @@
           Save as Draft
         </button>
         <button
+          (click)="onSubmit()"
           class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),

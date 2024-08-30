@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Invoice } from '../../../models/invoice';
 
-// Load All Invoices Actions
 export const loadAllInvoices = createAction('[Invoices] Load All Invoices');
 
 export const allInvoicesLoaded = createAction(
@@ -14,7 +13,6 @@ export const loadAllInvoicesFailure = createAction(
   props<{ error: any }>()
 );
 
-// Add Invoice Actions
 export const addInvoice = createAction(
   '[Invoices] Add Invoice',
   props<{ invoice: Invoice }>()

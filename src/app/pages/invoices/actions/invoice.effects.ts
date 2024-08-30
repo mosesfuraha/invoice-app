@@ -1,22 +1,29 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { InvoiceService } from '../../../services/invoice.service';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { InvoiceActions } from './invoice.types';
+import { Store } from '@ngrx/store';
+import * as fromInvoice from './invoice.selectors';
+import { Invoice } from '../../../models/invoice';
 
 @Injectable()
 export class InvoiceEffects {
   private actions$ = inject(Actions);
-
-  constructor(private invoiceService: InvoiceService) {}
+  private store = inject(Store);
+  private invoiceService = inject(InvoiceService);
 
   loadInvoices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.loadAllInvoices),
       switchMap(() =>
         this.invoiceService.findAllInvoices().pipe(
-          map((invoices) => InvoiceActions.allInvoicesLoaded({ invoices })),
+          map((invoices) =>
+            InvoiceActions.allInvoicesLoaded({
+              invoices: this.formatIds(invoices),
+            })
+          ),
           catchError((error) =>
             of(InvoiceActions.loadAllInvoicesFailure({ error: error.message }))
           )
@@ -28,14 +35,53 @@ export class InvoiceEffects {
   createInvoice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.addInvoice),
-      switchMap((action) =>
-        this.invoiceService.addInvoice(action.invoice).pipe(
-          map((invoice) => InvoiceActions.addInvoiceSuccess({ invoice })),
+      withLatestFrom(this.store.select(fromInvoice.getAllInvoices)),
+      switchMap(([action, invoices]) => {
+        const formattedInvoices = this.formatIds(invoices);
+        const newId = this.generateUniqueId(formattedInvoices);
+        const newInvoice: Invoice = { ...action.invoice, id: newId };
+
+        return this.invoiceService.addInvoice(newInvoice).pipe(
+          map(() => InvoiceActions.addInvoiceSuccess({ invoice: newInvoice })),
           catchError((error) =>
             of(InvoiceActions.addInvoiceFailure({ error: error.message }))
           )
-        )
-      )
+        );
+      })
     )
   );
+
+  private formatIds(invoices: Invoice[]): Invoice[] {
+    return invoices.map((invoice) => this.formatId(invoice));
+  }
+
+  private formatId(invoice: Invoice): Invoice {
+    if (!/^[A-Z]{2}\d{3}$/.test(invoice.id)) {
+      invoice.id = this.generateInvoiceId();
+    }
+    return invoice;
+  }
+
+  private generateUniqueId(invoices: Invoice[]): string {
+    const existingIds = invoices.map((inv) => inv.id);
+    let newId: string;
+
+    do {
+      newId = this.generateInvoiceId();
+    } while (existingIds.includes(newId));
+
+    return newId;
+  }
+
+  private generateInvoiceId(): string {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letterPart =
+      letters.charAt(Math.floor(Math.random() * letters.length)) +
+      letters.charAt(Math.floor(Math.random() * letters.length));
+    const numberPart = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, '0');
+
+    return `${letterPart}${numberPart}`; 
+  }
 }

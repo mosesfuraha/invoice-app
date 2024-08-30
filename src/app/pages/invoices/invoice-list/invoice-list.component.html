@@ -201,6 +201,9 @@
   [@slideInOut]="showForm ? 'in' : 'out'"
   class="fixed top-0 left-24 h-full bg-black bg-opacity-50 w-full"
   [style.display]="showForm ? 'block' : 'none'"
+  (click)="closeForm()"
 >
-  <app-invoice-form (formClose)="toggleForm()"></app-invoice-form>
+  <div class="relative  max-w-lg" (click)="$event.stopPropagation()">
+    <app-invoice-form (formClose)="toggleForm()"></app-invoice-form>
+  </div>
 </div>
