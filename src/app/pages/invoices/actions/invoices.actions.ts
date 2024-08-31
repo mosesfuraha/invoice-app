@@ -27,6 +27,7 @@ export const addInvoiceFailure = createAction(
   '[Invoices] Add Invoice Failure',
   props<{ error: any }>()
 );
+
 export const getInvoiceById = createAction(
   '[Invoices] Get Invoice By ID',
   props<{ id: string }>()
@@ -39,5 +40,21 @@ export const getInvoiceByIdSuccess = createAction(
 
 export const getInvoiceByIdFailure = createAction(
   '[Invoices] Get Invoice By ID Failure',
+  props<{ error: any }>()
+);
+
+// Edit Invoice Actions
+export const editInvoice = createAction(
+  '[Invoices] Edit Invoice',
+  props<{ invoice: Invoice }>()
+);
+
+export const editInvoiceSuccess = createAction(
+  '[Invoices] Edit Invoice Success',
+  props<{ invoice: Invoice }>()
+);
+
+export const editInvoiceFailure = createAction(
+  '[Invoices] Edit Invoice Failure',
   props<{ error: any }>()
 );

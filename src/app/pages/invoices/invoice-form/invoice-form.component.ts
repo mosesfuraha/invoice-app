@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -11,6 +11,7 @@ import { Invoice } from '../../../models/invoice';
   styleUrls: ['./invoice-form.component.css'],
 })
 export class InvoiceFormComponent implements OnInit {
+  @Input() invoice: Invoice | null = null;
   isDarkMode$: Observable<boolean>;
   invoiceForm!: FormGroup;
   @Output() formClose = new EventEmitter<void>();
@@ -34,6 +35,36 @@ export class InvoiceFormComponent implements OnInit {
       paymentTerms: ['', Validators.required],
       description: ['', Validators.required],
       items: this.formBuilder.array([]),
+    });
+
+    if (this.invoice) {
+      this.getFormData(this.invoice);
+    }
+  }
+
+  getFormData(invoice: Invoice) {
+    this.invoiceForm.patchValue({
+      street: invoice.senderAddress.street,
+      city: invoice.senderAddress.city,
+      postCode: invoice.senderAddress.postCode,
+      country: invoice.senderAddress.country,
+      clientName: invoice.clientName,
+      clientEmail: invoice.clientEmail,
+      invoiceDate: invoice.createdAt,
+      paymentTerms: invoice.paymentTerms,
+      description: invoice.description,
+    });
+
+    this.items.clear();
+    invoice.items.forEach((item) => {
+      const itemGroup = this.createItemFormGroup();
+      itemGroup.patchValue({
+        itemName: item.name,
+        qty: item.quantity,
+        price: item.price,
+        total: item.total,
+      });
+      this.items.push(itemGroup);
     });
   }
 
@@ -63,8 +94,10 @@ export class InvoiceFormComponent implements OnInit {
       const formValue = this.invoiceForm.value;
 
       const invoice: Invoice = {
-        id: this.generateUniqueId(),
-        createdAt: this.formatDate(new Date()),
+        id: this.invoice ? this.invoice.id : this.generateUniqueId(), 
+        createdAt: this.invoice
+          ? this.invoice.createdAt
+          : this.formatDate(new Date()), 
         paymentDue: this.calculatePaymentDue(
           formValue.invoiceDate,
           formValue.paymentTerms
@@ -110,7 +143,6 @@ export class InvoiceFormComponent implements OnInit {
     paymentTerms: string
   ): string {
     const terms = parseInt(paymentTerms.replace(/\D/g, ''), 10) || 0;
-
     const date = new Date(invoiceDate);
     if (isNaN(date.getTime())) {
       console.error('Invalid invoice date:', invoiceDate);
@@ -118,7 +150,6 @@ export class InvoiceFormComponent implements OnInit {
     }
 
     date.setDate(date.getDate() + terms);
-
     return this.formatDate(date);
   }
 

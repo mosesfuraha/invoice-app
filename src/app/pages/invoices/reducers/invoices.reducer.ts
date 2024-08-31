@@ -72,6 +72,24 @@ export const invoiceReducer = createReducer(
     loading: false,
     error,
     selectedInvoiceId: null,
+  })),
+  on(InvoiceActions.editInvoice, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(InvoiceActions.editInvoiceSuccess, (state, { invoice }) =>
+    adapter.updateOne(
+      { id: invoice.id, changes: invoice },
+      { ...state, loading: false, error: null }
+    )
+  ),
+
+  on(InvoiceActions.editInvoiceFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
   }))
 );
 
@@ -80,4 +98,3 @@ export const { selectIds, selectEntities, selectAll, selectTotal } =
 
 export const selectSelectedInvoiceId = (state: InvoiceState) =>
   state.selectedInvoiceId;
-

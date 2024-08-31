@@ -51,7 +51,6 @@ export class InvoiceEffects {
     )
   );
 
-
   getInvoiceById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.getInvoiceById),
@@ -70,6 +69,30 @@ export class InvoiceEffects {
           }),
           catchError((error) =>
             of(InvoiceActions.getInvoiceByIdFailure({ error: error.message }))
+          )
+        )
+      )
+    )
+  );
+
+  editInvoice$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(InvoiceActions.editInvoice),
+      switchMap((action) =>
+        this.invoiceService.editInvoice(action.invoice).pipe(
+          map((updatedInvoice) => {
+            if (updatedInvoice) {
+              return InvoiceActions.editInvoiceSuccess({
+                invoice: updatedInvoice,
+              });
+            } else {
+              return InvoiceActions.editInvoiceFailure({
+                error: 'Invoice not found',
+              });
+            }
+          }),
+          catchError((error) =>
+            of(InvoiceActions.editInvoiceFailure({ error: error.message }))
           )
         )
       )
