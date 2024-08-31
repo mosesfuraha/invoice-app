@@ -27,3 +27,7 @@ export const getInvoiceError = createSelector(
 
 export const getInvoiceById = (id: string) =>
   createSelector(getInvoiceEntities, (entities) => entities[id]);
+export function selectEntityById(selectEntityById: any, arg1: { id: any; }): import("rxjs").OperatorFunction<any, unknown> {
+  throw new Error('Function not implemented.');
+}
+

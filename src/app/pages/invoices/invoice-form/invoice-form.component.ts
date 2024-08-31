@@ -12,9 +12,11 @@ import { Invoice } from '../../../models/invoice';
 })
 export class InvoiceFormComponent implements OnInit {
   @Input() invoice: Invoice | null = null;
+  @Input() isEditMode = false;
   isDarkMode$: Observable<boolean>;
   invoiceForm!: FormGroup;
   @Output() formClose = new EventEmitter<void>();
+  @Output() formSubmit = new EventEmitter<Invoice>();
 
   constructor(
     private store: Store<{ theme: { isDarkMode: boolean } }>,
@@ -91,13 +93,14 @@ export class InvoiceFormComponent implements OnInit {
 
   onSubmit() {
     if (this.invoiceForm.valid) {
+      console.log('Form Value:', this.invoiceForm.value);
       const formValue = this.invoiceForm.value;
 
       const invoice: Invoice = {
-        id: this.invoice ? this.invoice.id : this.generateUniqueId(), 
+        id: this.invoice ? this.invoice.id : this.generateUniqueId(),
         createdAt: this.invoice
           ? this.invoice.createdAt
-          : this.formatDate(new Date()), 
+          : this.formatDate(new Date()),
         paymentDue: this.calculatePaymentDue(
           formValue.invoiceDate,
           formValue.paymentTerms
@@ -130,11 +133,12 @@ export class InvoiceFormComponent implements OnInit {
 
       this.store.dispatch(InvoiceActions.addInvoice({ invoice }));
 
-      this.invoiceForm.reset();
-
+      this.formSubmit.emit(invoice);
       this.formClose.emit();
     } else {
       this.markFormGroupTouched(this.invoiceForm);
+
+      console.error('Form is invalid', this.invoiceForm.errors);
     }
   }
 

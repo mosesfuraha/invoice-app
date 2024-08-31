@@ -43,7 +43,6 @@ export const getInvoiceByIdFailure = createAction(
   props<{ error: any }>()
 );
 
-// Edit Invoice Actions
 export const editInvoice = createAction(
   '[Invoices] Edit Invoice',
   props<{ invoice: Invoice }>()

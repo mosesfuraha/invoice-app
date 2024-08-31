@@ -881,15 +881,41 @@
       }"
     >
       <button
+        *ngIf="isEditMode"
+        (click)="formClose.emit()"
         class="py-3 px-6 rounded-full hover:bg-opacity-75 transition duration-300"
         [ngClass]="{
           'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
           'bg-darkSecondary text-darkText': isDarkMode$ | async
         }"
       >
-        Discard
+        Cancel
       </button>
-      <div class="flex gap-4">
+
+      <button
+        *ngIf="isEditMode"
+        (click)="onSubmit()"
+        class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+        [ngClass]="{
+          'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),
+          'bg-darkAccent text-darkText': isDarkMode$ | async
+        }"
+      >
+        Save Changes
+      </button>
+
+      <ng-container *ngIf="!isEditMode">
+        <button
+          (click)="formClose.emit()"
+          class="py-3 px-6 rounded-full hover:bg-opacity-75 transition duration-300"
+          [ngClass]="{
+            'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
+            'bg-darkSecondary text-darkText': isDarkMode$ | async
+          }"
+        >
+          Discard
+        </button>
+
         <button
           (click)="onSubmit()"
           class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
@@ -900,6 +926,7 @@
         >
           Save as Draft
         </button>
+
         <button
           (click)="onSubmit()"
           class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
@@ -910,7 +937,7 @@
         >
           Save & Send
         </button>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>

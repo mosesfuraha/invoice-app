@@ -4,7 +4,7 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { InvoiceActions } from './invoice.types';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import * as fromInvoice from './invoice.selectors';
 import { Invoice } from '../../../models/invoice';
 
@@ -78,23 +78,28 @@ export class InvoiceEffects {
   editInvoice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.editInvoice),
-      switchMap((action) =>
-        this.invoiceService.editInvoice(action.invoice).pipe(
-          map((updatedInvoice) => {
-            if (updatedInvoice) {
-              return InvoiceActions.editInvoiceSuccess({
-                invoice: updatedInvoice,
-              });
-            } else {
-              return InvoiceActions.editInvoiceFailure({
-                error: 'Invoice not found',
-              });
-            }
-          }),
-          catchError((error) =>
-            of(InvoiceActions.editInvoiceFailure({ error: error.message }))
-          )
-        )
+      withLatestFrom(this.store.pipe(select(fromInvoice.getInvoiceEntities))),
+      switchMap(([action, entities]) => {
+        const { invoice } = action;
+        const existingInvoice = entities[invoice.id];
+        if (existingInvoice) {
+          const updatedInvoice: Invoice = {
+            ...existingInvoice,
+            ...invoice,
+          };
+          return of(
+            InvoiceActions.editInvoiceSuccess({ invoice: updatedInvoice })
+          );
+        } else {
+          return of(
+            InvoiceActions.editInvoiceFailure({
+              error: 'Invoice not found',
+            })
+          );
+        }
+      }),
+      catchError((error) =>
+        of(InvoiceActions.editInvoiceFailure({ error: error.message }))
       )
     )
   );

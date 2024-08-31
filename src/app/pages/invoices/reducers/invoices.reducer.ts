@@ -73,6 +73,7 @@ export const invoiceReducer = createReducer(
     error,
     selectedInvoiceId: null,
   })),
+
   on(InvoiceActions.editInvoice, (state) => ({
     ...state,
     loading: true,
@@ -90,7 +91,8 @@ export const invoiceReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+ 
 );
 
 export const { selectIds, selectEntities, selectAll, selectTotal } =
