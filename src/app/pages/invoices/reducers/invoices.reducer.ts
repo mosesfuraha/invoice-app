@@ -6,6 +6,7 @@ import { InvoiceActions } from '../actions/invoice.types';
 export interface InvoiceState extends EntityState<Invoice> {
   loading: boolean;
   error: string | null;
+  selectedInvoiceId: string | null;
 }
 
 export const adapter = createEntityAdapter<Invoice>();
@@ -13,6 +14,7 @@ export const adapter = createEntityAdapter<Invoice>();
 export const initialInvoiceState: InvoiceState = adapter.getInitialState({
   loading: false,
   error: null,
+  selectedInvoiceId: null,
 });
 
 export const invoiceReducer = createReducer(
@@ -48,8 +50,34 @@ export const invoiceReducer = createReducer(
     ...state,
     loading: false,
     error,
+  })),
+
+  on(InvoiceActions.getInvoiceById, (state, { id }) => ({
+    ...state,
+    loading: true,
+    error: null,
+    selectedInvoiceId: id,
+  })),
+
+  on(InvoiceActions.getInvoiceByIdSuccess, (state, { invoice }) =>
+    adapter.upsertOne(invoice, {
+      ...state,
+      loading: false,
+      error: null,
+    })
+  ),
+
+  on(InvoiceActions.getInvoiceByIdFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+    selectedInvoiceId: null,
   }))
 );
 
 export const { selectIds, selectEntities, selectAll, selectTotal } =
   adapter.getSelectors();
+
+export const selectSelectedInvoiceId = (state: InvoiceState) =>
+  state.selectedInvoiceId;
+

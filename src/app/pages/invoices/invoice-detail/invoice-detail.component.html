@@ -1,1 +1,221 @@
-<p>invoice-detail works!</p>
+<section
+  class="lg:w-[850px] md:w-full space-y-7 overflow-y-auto max-sm:mb-28 transition-all duration-300 ease-in-out font-spartan"
+  [ngClass]="{ dark: isDarkMode$ | async }"
+>
+  <div *ngIf="invoice$ | async as invoice">
+    <div class="mb-6">
+      <a
+        routerLink="/"
+        class="flex items-center gap-4 text-purple-3 font-bold text-xl mb-7"
+      >
+        <img class="h-4" src="/assets/icon-arrow-left.svg" alt="Go back" />
+        <span class="text-darkAccent dark:text-white"> Go back</span>
+      </a>
+
+      <div
+        class="w-full flex justify-between items-center bg-white dark:bg-darkPrimary py-5 px-8 max-md:px-3 rounded-lg"
+      >
+        <div
+          class="flex items-center gap-8 max-sm:w-full max-sm:justify-between"
+        >
+          <h1 class="text-[#858BB2] text-lg dark:text-white">Status</h1>
+
+          <div
+            class="flex items-center justify-center space-x-2 w-[100px] p-1 rounded-lg"
+            [ngClass]="{
+              'bg-[#33d6a044]':
+                invoice.status === 'paid' && !(isDarkMode$ | async),
+              'bg-[#33d6a055]':
+                invoice.status === 'paid' && (isDarkMode$ | async),
+              'bg-[#ff91003e]': invoice.status === 'pending',
+              'bg-[#373b5356]': invoice.status === 'draft'
+            }"
+          >
+            <span
+              class="w-2 h-2 rounded-full"
+              [ngClass]="{
+                'bg-[#33D69F]': invoice.status === 'paid',
+                'bg-[#FF8F00]': invoice.status === 'pending',
+                'bg-[#373B53]': invoice.status === 'draft'
+              }"
+            ></span>
+            <span
+              class="font-semibold"
+              [ngClass]="{
+                'text-[#33D69F]': invoice.status === 'paid',
+                'text-[#FF8F00]': invoice.status === 'pending',
+                'text-[#373B53]': invoice.status === 'draft'
+              }"
+            >
+              {{ invoice.status | titlecase }}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex gap-2 items-center">
+          <button
+            class="py-2 px-4 rounded-full bg-darkSecondary font-semibold text-lightAccent text-sm"
+          >
+            Edit
+          </button>
+          <button
+            class="py-2 px-4 rounded-full bg-[#EC5757] text-lightBg text-sm"
+          >
+            Delete
+          </button>
+          <button
+            *ngIf="invoice.status !== 'paid'"
+            class="py-2 px-4 rounded-full bg-lightAccent text-white text-sm"
+          >
+            Mark as Paid
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full rounded-2xl bg-white dark:bg-darkText px-10 max-md:px-3 py-7"
+    >
+      <div class="flex max-sm:flex-col justify-between w-full">
+        <div class="flex flex-col gap-1 max-sm:w-full">
+          <h1 class="text-lg font-bold">
+            <span class="text-lightSecondary">#</span
+            ><span class="text-black-1 dark:text-white">{{ invoice.id }}</span>
+          </h1>
+          <p class="text-lightSecondary text-sm dark:text-lightBg">
+            {{ invoice.description }}
+          </p>
+        </div>
+        <div
+          class="flex flex-col gap-2 text-end max-sm:text-start max-sm:mt-8 text-grey-3 dark:text-grey-1"
+        >
+          <p class="text-lightSecondary">{{ invoice.senderAddress.street }}</p>
+          <p class="text-lightSecondary">{{ invoice.senderAddress.city }}</p>
+          <p class="text-lightSecondary">
+            {{ invoice.senderAddress.postCode }}
+          </p>
+          <p class="text-lightSecondary">{{ invoice.senderAddress.country }}</p>
+        </div>
+      </div>
+
+      <div class="grid max-sm:grid-cols-2 grid-cols-3 gap-8 mt-4 max-sm:mt-8">
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-lightSecondary text-sm dark:text-grey-1">
+              Invoice Date
+            </h2>
+            <p class="text-darkText text-lg font-bold dark:text-white">
+              {{ invoice.createdAt }}
+            </p>
+          </div>
+          <div class="flex flex-col gap-1">
+            <h2 class="text-lightSecondary text-sm dark:text-grey-1">
+              Payment Due
+            </h2>
+            <p class="text-darkText text-lg font-bold dark:text-white">
+              {{ invoice.paymentDue }}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-lightSecondary text-sm dark:text-grey-1">Bill To</h2>
+          <p class="text-darkText text-lg font-bold mt-[3px] dark:text-white">
+            {{ invoice.clientName }}
+          </p>
+          <div class="flex flex-col gap-1 mt-3">
+            <p class="text-lightSecondary text-sm dark:text-grey-1">
+              {{ invoice.clientAddress.street }}
+            </p>
+            <p class="text-lightSecondary text-sm dark:text-grey-1">
+              {{ invoice.clientAddress.city }}
+            </p>
+            <p class="text-lightSecondary text-sm dark:text-grey-1">
+              {{ invoice.clientAddress.postCode }}
+            </p>
+            <p class="text-lightSecondary text-sm dark:text-grey-1">
+              {{ invoice.clientAddress.country }}
+            </p>
+          </div>
+        </div>
+        <div class="flex flex-col gap-[3px]">
+          <h2 class="text-lightSecondary text-sm dark:text-grey-1">Sent to</h2>
+          <p class="text-darkText text-lg font-bold dark:text-white">
+            {{ invoice.clientEmail }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="mt-10 rounded-xl bg-grey-1 dark:bg-darkblue-2 pt-5 w-full flex justify-center"
+      >
+        <div class="w-full flex flex-col justify-center">
+          <div class="flex justify-center">
+            <div class="flex flex-col justify-between w-[90%]">
+              <div
+                class="grid grid-cols-5 space-x-16 w-full text-purple-3 text-lg max-sm:hidden"
+              >
+                <h2
+                  class="col-span-2 max-md:col-span-1 text-lightSecondary text-sm mb-8 dark:text-grey-1"
+                >
+                  Item Name
+                </h2>
+                <h2 class="text-lightSecondary text-sm dark:text-grey-1">
+                  Qty.
+                </h2>
+                <h2 class="text-lightSecondary text-sm dark:text-grey-1">
+                  Price
+                </h2>
+                <h2 class="text-lightSecondary text-sm dark:text-grey-1">
+                  Total
+                </h2>
+              </div>
+              <div
+                *ngFor="let item of invoice.items"
+                class="grid grid-cols-5 gap-4 w-full text-lg max-sm:hidden items-center"
+              >
+                <p
+                  class="col-span-2 max-md:col-span-1 text-darkText text-lg font-medium dark:text-white"
+                >
+                  {{ item.name }}
+                </p>
+                <p
+                  class="text-center text-lightSecondary dark:text-white font-medium ml-9"
+                >
+                  {{ item.quantity }}
+                </p>
+                <p
+                  class="text-right text-lightSecondary text-lg font-medium dark:text-white"
+                >
+                  £{{ item.price | number : "1.2-2" }}
+                </p>
+                <p
+                  class="text-right text-lightSecondary text-lg font-medium dark:text-white"
+                >
+                  £{{ item.total | number : "1.2-2" }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="flex justify-center mt-8 py-8 px w-full rounded-b-xl bg-darkAccent dark:bg-black-1"
+            >
+              <div class="flex justify-between w-[90%]">
+                <h2
+                  class="text-lightBg font-light text-sm col-span-4 dark:text-grey-1"
+                >
+                  Amount Due
+                </h2>
+                <h2
+                  class="text-white font-bold text-xl text-center w-40 dark:text-white"
+                >
+                  £ {{ invoice.total | number : "1.2-2" }}
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

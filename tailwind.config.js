@@ -21,6 +21,7 @@ module.exports = {
         darkSecondary: "#F8F8FB",
         darkTextHeader: "#ffffff",
         darkInput: "#252945",
+        darkAccent: "#0C0E16",
       },
     },
   },

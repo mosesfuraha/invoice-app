@@ -11,6 +11,8 @@ import {
   keyframes,
 } from '@angular/animations';
 
+import { Router } from '@angular/router';
+
 import { Invoice } from '../../../models/invoice';
 import { loadAllInvoices } from '../actions/invoices.actions';
 import { InvoiceState, selectAll } from '../reducers/invoices.reducer';
@@ -81,7 +83,8 @@ export class InvoiceListComponent implements OnInit {
     private store: Store<{
       theme: { isDarkMode: boolean };
       invoices: InvoiceState;
-    }>
+    }>,
+    private router: Router
   ) {
     this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
 
@@ -130,5 +133,10 @@ export class InvoiceListComponent implements OnInit {
   closeForm(): void {
     this.showForm = false;
   }
-  
+  navigateToDetail(invoiceId: string): void {
+    this.router.navigate(['/invoice', invoiceId]);
+  }
+  trackByInvoiceId(index: number, invoice: Invoice): string {
+    return invoice.id;
+  }
 }

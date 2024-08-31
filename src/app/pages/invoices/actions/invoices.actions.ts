@@ -27,3 +27,17 @@ export const addInvoiceFailure = createAction(
   '[Invoices] Add Invoice Failure',
   props<{ error: any }>()
 );
+export const getInvoiceById = createAction(
+  '[Invoices] Get Invoice By ID',
+  props<{ id: string }>()
+);
+
+export const getInvoiceByIdSuccess = createAction(
+  '[Invoices] Get Invoice By ID Success',
+  props<{ invoice: Invoice }>()
+);
+
+export const getInvoiceByIdFailure = createAction(
+  '[Invoices] Get Invoice By ID Failure',
+  props<{ error: any }>()
+);

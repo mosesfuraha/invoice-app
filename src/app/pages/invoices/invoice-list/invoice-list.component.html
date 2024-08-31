@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col p-11 space-y-8 font-spartan"
+  class="flex flex-col p-11 space-y-8 font-spartan lg:w-[850px] md:w-full"
   [ngClass]="{ dark: isDarkMode$ | async }"
 >
   <div class="flex justify-between items-center">
@@ -20,7 +20,7 @@
           'text-darkSecondary': isDarkMode$ | async
         }"
       >
-        There are 7 total invoices
+        There are {{ (filteredInvoices$ | async)?.length || 0 }} total invoices
       </p>
     </div>
 
@@ -100,6 +100,7 @@
       <button
         class="flex items-center gap-3 font-bold py-3 px-3 rounded-full bg-lightAccent text-darkSecondary"
         (click)="toggleForm()"
+        aria-label="Create New Invoice"
       >
         <span
           class="w-6 h-6 bg-white rounded-full flex items-center justify-center"
@@ -113,12 +114,16 @@
 
   <ul class="space-y-4 cursor-pointer">
     <li
-      *ngFor="let invoice of filteredInvoices$ | async"
+      *ngFor="
+        let invoice of filteredInvoices$ | async;
+        trackBy: trackByInvoiceId
+      "
       class="flex justify-between items-center p-6 rounded-md shadow-md w-full"
       [ngClass]="{
         'bg-white': !(isDarkMode$ | async),
         'bg-darkPrimary': isDarkMode$ | async
       }"
+      (click)="navigateToDetail(invoice.id)"
     >
       <div
         class="font-bold"
@@ -203,7 +208,10 @@
   [style.display]="showForm ? 'block' : 'none'"
   (click)="closeForm()"
 >
-  <div class="relative  max-w-lg" (click)="$event.stopPropagation()">
+  <div
+    class="relative p-6 max-w-lg dark:bg-darkPrimary rounded-lg"
+    (click)="$event.stopPropagation()"
+  >
     <app-invoice-form (formClose)="toggleForm()"></app-invoice-form>
   </div>
 </div>

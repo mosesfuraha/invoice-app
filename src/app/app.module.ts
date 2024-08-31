@@ -9,7 +9,7 @@ import { InvoiceListComponent } from './pages/invoices/invoice-list/invoice-list
 import { InvoiceDetailComponent } from './pages/invoices/invoice-detail/invoice-detail.component';
 import { InvoiceFormComponent } from './pages/invoices/invoice-form/invoice-form.component';
 import { SidebarComponent } from './pages/sidebar/sidebar.component';
-import { HomeComponent } from './pages/home/home.component';
+
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ThemeEffects } from './theme/theme.effects';
@@ -29,7 +29,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     InvoiceDetailComponent,
     InvoiceFormComponent,
     SidebarComponent,
-    HomeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Invoice } from '../models/invoice';
 
 @Injectable({
@@ -17,5 +17,11 @@ export class InvoiceService {
 
   addInvoice(invoice: Invoice): Observable<Invoice> {
     return this.http.post<Invoice>(this.dataUrl, invoice);
+  }
+
+  getInvoiceById(id: string): Observable<Invoice | undefined> {
+    return this.http
+      .get<Invoice[]>(this.dataUrl)
+      .pipe(map((invoices) => invoices.find((invoice) => invoice.id === id)));
   }
 }

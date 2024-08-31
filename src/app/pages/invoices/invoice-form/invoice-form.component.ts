@@ -62,12 +62,9 @@ export class InvoiceFormComponent implements OnInit {
     if (this.invoiceForm.valid) {
       const formValue = this.invoiceForm.value;
 
-      // Check the format of invoiceDate
-      console.log('Invoice Date:', formValue.invoiceDate); // Should log in 'YYYY-MM-DD' format
-
       const invoice: Invoice = {
         id: this.generateUniqueId(),
-        createdAt: this.formatDate(new Date()), // Use current date in YYYY-MM-DD format
+        createdAt: this.formatDate(new Date()),
         paymentDue: this.calculatePaymentDue(
           formValue.invoiceDate,
           formValue.paymentTerms
@@ -112,20 +109,16 @@ export class InvoiceFormComponent implements OnInit {
     invoiceDate: string,
     paymentTerms: string
   ): string {
-    // Convert payment terms to a number, default to 0 if conversion fails
     const terms = parseInt(paymentTerms.replace(/\D/g, ''), 10) || 0;
 
-    // Create a date object from the invoice date string
     const date = new Date(invoiceDate);
     if (isNaN(date.getTime())) {
       console.error('Invalid invoice date:', invoiceDate);
-      return ''; // Return an empty string or handle the error as needed
+      return '';
     }
 
-    // Add the payment terms to the invoice date
     date.setDate(date.getDate() + terms);
 
-    // Format the new date in YYYY-MM-DD format
     return this.formatDate(date);
   }
 

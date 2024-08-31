@@ -51,6 +51,31 @@ export class InvoiceEffects {
     )
   );
 
+
+  getInvoiceById$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(InvoiceActions.getInvoiceById),
+      switchMap((action) =>
+        this.invoiceService.getInvoiceById(action.id).pipe(
+          map((invoice) => {
+            if (invoice) {
+              return InvoiceActions.getInvoiceByIdSuccess({
+                invoice: this.formatId(invoice),
+              });
+            } else {
+              return InvoiceActions.getInvoiceByIdFailure({
+                error: 'Invoice not found',
+              });
+            }
+          }),
+          catchError((error) =>
+            of(InvoiceActions.getInvoiceByIdFailure({ error: error.message }))
+          )
+        )
+      )
+    )
+  );
+
   private formatIds(invoices: Invoice[]): Invoice[] {
     return invoices.map((invoice) => this.formatId(invoice));
   }
@@ -82,6 +107,6 @@ export class InvoiceEffects {
       .toString()
       .padStart(3, '0');
 
-    return `${letterPart}${numberPart}`; 
+    return `${letterPart}${numberPart}`;
   }
 }
