@@ -1,18 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, BehaviorSubject, of, combineLatest } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-  keyframes,
-} from '@angular/animations';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Invoice } from '../../../models/invoice';
 import { Store } from '@ngrx/store';
 import { loadAllInvoices } from '../actions/invoices.actions';
+import * as fromInvoiceSelectors from '../actions/invoice.selectors';
+import {
+  animate,
+  keyframes,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-invoice-list',
@@ -63,13 +64,13 @@ import { loadAllInvoices } from '../actions/invoices.actions';
 })
 export class InvoiceListComponent implements OnInit {
   isDarkMode$: Observable<boolean>;
+  invoices$: Observable<Invoice[]>;
   filteredInvoices$: Observable<Invoice[]>;
   dropdownVisible = false;
   dropdownTimeoutId: any;
   showForm = false;
 
   private filterSubject = new BehaviorSubject<string[]>([]);
-  private invoicesSubject = new BehaviorSubject<Invoice[]>([]);
 
   selectedStatuses: { [key: string]: boolean } = {
     pending: false,
@@ -78,13 +79,21 @@ export class InvoiceListComponent implements OnInit {
   };
 
   constructor(
-    private store: Store<{ theme: { isDarkMode: boolean } }>,
+    private store: Store<{
+      theme: { isDarkMode: boolean };
+      invoices: Invoice[];
+    }>,
     private router: Router
   ) {
+    // Select the dark mode state from the store
     this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
 
+    // Use the selector to get invoices from the store
+    this.invoices$ = this.store.select(fromInvoiceSelectors.getAllInvoices);
+
+    // Combine invoices with filter status to filter the list
     this.filteredInvoices$ = combineLatest([
-      this.invoicesSubject.asObservable(),
+      this.invoices$,
       this.filterSubject.asObservable(),
     ]).pipe(
       map(([invoices, selectedStatuses]) => {
@@ -98,17 +107,9 @@ export class InvoiceListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getInvoicesFromLocalStorage().subscribe((invoices) => {
-      this.invoicesSubject.next(invoices);
-    });
+    this.store.dispatch(loadAllInvoices());
 
     this.updateSelectedStatuses();
-  }
-
-  getInvoicesFromLocalStorage(): Observable<Invoice[]> {
-    const invoicesJson = localStorage.getItem('invoices');
-    const invoices: Invoice[] = invoicesJson ? JSON.parse(invoicesJson) : [];
-    return of(invoices);
   }
 
   showDropdown(): void {

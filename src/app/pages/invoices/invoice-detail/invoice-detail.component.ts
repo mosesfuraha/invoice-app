@@ -82,26 +82,24 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.route.params
-      .pipe(
-        switchMap((params) => {
-          const invoiceId = params['id'];
-          if (invoiceId) {
-            this.store.dispatch(
-              InvoiceActions.getInvoiceById({ id: invoiceId })
-            );
+    this.invoice$ = this.route.params.pipe(
+      switchMap((params) => {
+        const invoiceId = params['id'];
+        if (invoiceId) {
+          // Dispatch the action to load the invoice
+          this.store.dispatch(InvoiceActions.getInvoiceById({ id: invoiceId }));
 
-            return this.store
-              .select(fromInvoiceSelectors.getInvoiceById(invoiceId))
-              .pipe(filter((invoice) => !!invoice));
-          } else {
-            return of(undefined);
-          }
-        })
-      )
-      .subscribe((invoice) => {
-        this.invoice$ = of(invoice);
-      });
+          // Select the invoice from the store
+          return this.store
+            .select(fromInvoiceSelectors.getInvoiceById(invoiceId))
+            .pipe(
+              filter((invoice) => !!invoice) // Ensure that the invoice is available
+            );
+        } else {
+          return of(undefined); // Handle undefined case
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -119,12 +117,10 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   handleEditForm(updatedInvoice: Invoice): void {
-    // Dispatch edit action and close the form
     this.store.dispatch(
-      InvoiceActions.editInvoice({ invoice: updatedInvoice })
+      InvoiceActions.editInvoiceSuccess({ invoice: updatedInvoice })
     );
 
-    // Close the form after saving changes
     this.closeForm();
   }
 

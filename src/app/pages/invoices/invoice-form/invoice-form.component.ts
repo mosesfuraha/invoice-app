@@ -139,11 +139,54 @@ export class InvoiceFormComponent implements OnInit {
       this.formSubmit.emit(invoice);
       this.formClose.emit();
 
-      window.location.reload();
+      // Reset form state without reloading
+      this.resetForm();
     } else {
       this.markFormGroupTouched(this.invoiceForm);
       console.error('Form is invalid', this.invoiceForm.errors);
     }
+  }
+
+  onSaveAsDraft() {
+    const formValue = this.invoiceForm.value;
+
+    const draftInvoice: Invoice = {
+      id: this.generateUniqueId(),
+      createdAt: this.formatDate(new Date()),
+      paymentDue: this.calculatePaymentDue(
+        formValue.invoiceDate || this.formatDate(new Date()),
+        formValue.paymentTerms || 'net30'
+      ),
+      description: formValue.description || '',
+      paymentTerms: formValue.paymentTerms || 'net30',
+      clientName: formValue.clientName || '',
+      clientEmail: formValue.clientEmail || '',
+      status: 'draft',
+      senderAddress: {
+        street: formValue.street || '',
+        city: formValue.city || '',
+        postCode: formValue.postCode || '',
+        country: formValue.country || '',
+      },
+      clientAddress: {
+        street: '',
+        city: '',
+        postCode: '',
+        country: '',
+      },
+      items: (formValue.items || []).map((item: any) => ({
+        name: item.itemName || '',
+        quantity: item.qty || 0,
+        price: item.price || 0,
+        total: (item.qty || 0) * (item.price || 0),
+      })),
+      total: this.calculateTotal(formValue.items || []),
+    };
+
+    this.store.dispatch(InvoiceActions.addInvoice({ invoice: draftInvoice }));
+    this.formSubmit.emit(draftInvoice);
+    this.formClose.emit();
+    this.resetForm();
   }
 
   private calculatePaymentDue(
@@ -165,7 +208,7 @@ export class InvoiceFormComponent implements OnInit {
     return items.reduce((sum, item) => sum + item.qty * item.price, 0);
   }
 
-  markFormGroupTouched(formGroup: FormGroup | FormArray) {
+  private markFormGroupTouched(formGroup: FormGroup | FormArray) {
     Object.values(formGroup.controls).forEach((control) => {
       if (control instanceof FormGroup || control instanceof FormArray) {
         this.markFormGroupTouched(control);
@@ -175,7 +218,7 @@ export class InvoiceFormComponent implements OnInit {
     });
   }
 
-  generateUniqueId(): string {
+  private generateUniqueId(): string {
     return 'ID' + Math.random().toString(36).substr(2, 9).toUpperCase();
   }
 
@@ -189,5 +232,11 @@ export class InvoiceFormComponent implements OnInit {
   private dateValidator(control: { value: string }) {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     return datePattern.test(control.value) ? null : { invalidDate: true };
+  }
+
+  private resetForm() {
+    this.invoiceForm.reset();
+    this.items.clear();
+    this.addItem(); // Add an initial empty item if necessary
   }
 }
