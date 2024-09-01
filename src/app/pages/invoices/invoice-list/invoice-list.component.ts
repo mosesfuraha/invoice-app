@@ -85,13 +85,10 @@ export class InvoiceListComponent implements OnInit {
     }>,
     private router: Router
   ) {
-    // Select the dark mode state from the store
     this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
 
-    // Use the selector to get invoices from the store
     this.invoices$ = this.store.select(fromInvoiceSelectors.getAllInvoices);
 
-    // Combine invoices with filter status to filter the list
     this.filteredInvoices$ = combineLatest([
       this.invoices$,
       this.filterSubject.asObservable(),

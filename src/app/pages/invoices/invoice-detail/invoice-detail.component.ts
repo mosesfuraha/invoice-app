@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, of } from 'rxjs';
-import { switchMap, map, filter } from 'rxjs/operators';
+import { switchMap, filter } from 'rxjs/operators';
 import { Invoice } from '../../../models/invoice';
 import { InvoiceState } from '../reducers/invoices.reducer';
 import {
@@ -86,17 +86,13 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
       switchMap((params) => {
         const invoiceId = params['id'];
         if (invoiceId) {
-          // Dispatch the action to load the invoice
           this.store.dispatch(InvoiceActions.getInvoiceById({ id: invoiceId }));
 
-          // Select the invoice from the store
           return this.store
             .select(fromInvoiceSelectors.getInvoiceById(invoiceId))
-            .pipe(
-              filter((invoice) => !!invoice) // Ensure that the invoice is available
-            );
+            .pipe(filter((invoice) => !!invoice));
         } else {
-          return of(undefined); // Handle undefined case
+          return of(undefined);
         }
       })
     );
@@ -117,10 +113,12 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   handleEditForm(updatedInvoice: Invoice): void {
+   
     this.store.dispatch(
       InvoiceActions.editInvoice({ invoice: updatedInvoice })
     );
 
+    
     this.closeForm();
   }
 
@@ -137,7 +135,6 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
       this.invoice$.subscribe((invoice) => {
         if (invoice && invoice.id) {
           this.store.dispatch(InvoiceActions.deleteInvoice({ id: invoice.id }));
-
           this.closeDeleteModal();
           this.router.navigate(['/']);
         }

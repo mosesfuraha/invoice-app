@@ -138,9 +138,6 @@ export class InvoiceFormComponent implements OnInit {
 
       this.formSubmit.emit(invoice);
       this.formClose.emit();
-
-      // Reset form state without reloading
-      this.resetForm();
     } else {
       this.markFormGroupTouched(this.invoiceForm);
       console.error('Form is invalid', this.invoiceForm.errors);
@@ -186,7 +183,6 @@ export class InvoiceFormComponent implements OnInit {
     this.store.dispatch(InvoiceActions.addInvoice({ invoice: draftInvoice }));
     this.formSubmit.emit(draftInvoice);
     this.formClose.emit();
-    this.resetForm();
   }
 
   private calculatePaymentDue(
@@ -232,11 +228,5 @@ export class InvoiceFormComponent implements OnInit {
   private dateValidator(control: { value: string }) {
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     return datePattern.test(control.value) ? null : { invalidDate: true };
-  }
-
-  private resetForm() {
-    this.invoiceForm.reset();
-    this.items.clear();
-    this.addItem(); // Add an initial empty item if necessary
   }
 }

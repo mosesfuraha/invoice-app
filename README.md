@@ -2,26 +2,34 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
 
-## Development server
+## Key Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **NgRx for State Management:** Efficient state handling using NgRx store, effects, and entities to manage and manipulate invoice data seamlessly.
+- **Responsive Design:** Provides a seamless user experience across all devices using CSS frameworks like Bootstrap or Tailwind CSS, ensuring your invoices are accessible on any screen size.
+- **Local Storage Integration:** Enables data persistence with local storage, allowing users to access invoices offline and ensuring continuity even without internet access.
+- **Dynamic Forms:** Implements reusable and dynamic forms for creating and editing invoices, featuring robust validation to ensure data integrity.
+- **Interactive UI:** Adheres closely to Figma design specifications, paying attention to hover states, accessibility, and overall user interaction to create an intuitive and engaging user interface.
 
-## Code scaffolding
+## Live Demo
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Check out the live demo [here](https://moses-invoice-app.netlify.app/).
 
-## Build
+## Setup
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+To get started with the project, follow the steps below:
 
-## Running unit tests
+```bash
+# Clone the repository
+git clone https://github.com/your-repo/invoice-app.git
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Navigate into the project directory
+cd InvoiceApp
 
-## Running end-to-end tests
+# Install dependencies
+npm install
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+# Install NgRx packages
+npm install @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Serve the application locally
+ng serve
