@@ -118,7 +118,7 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
 
   handleEditForm(updatedInvoice: Invoice): void {
     this.store.dispatch(
-      InvoiceActions.editInvoiceSuccess({ invoice: updatedInvoice })
+      InvoiceActions.editInvoice({ invoice: updatedInvoice })
     );
 
     this.closeForm();

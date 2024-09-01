@@ -20,7 +20,12 @@
           'text-darkSecondary': isDarkMode$ | async
         }"
       >
-        There are {{ (filteredInvoices$ | async)?.length || 0 }} total invoices
+        <ng-container
+          *ngIf="(filteredInvoices$ | async)?.length; else noInvoicesText"
+        >
+          There are {{ (filteredInvoices$ | async)?.length }} total invoices
+        </ng-container>
+        <ng-template #noInvoicesText>No Invoices</ng-template>
       </p>
     </div>
 
@@ -40,7 +45,7 @@
         <img
           [src]="
             dropdownVisible
-              ? 'assets/icon.arrow.up.svg'
+              ? 'assets/icon-arrow-up.svg'
               : 'assets/icon-arrow-down.svg'
           "
           alt="Arrow Down Icon"
@@ -112,96 +117,106 @@
     </div>
   </div>
 
-  <ul class="space-y-4 cursor-pointer">
-    <li
-      *ngFor="
-        let invoice of filteredInvoices$ | async;
-        trackBy: trackByInvoiceId
-      "
-      class="flex justify-between items-center p-6 rounded-md shadow-md w-full"
-      [ngClass]="{
-        'bg-white': !(isDarkMode$ | async),
-        'bg-darkPrimary': isDarkMode$ | async
-      }"
-      (click)="navigateToDetail(invoice.id)"
-    >
-      <div
-        class="font-bold"
+  <ng-container *ngIf="(filteredInvoices$ | async)?.length; else noInvoices">
+    <ul class="space-y-4 cursor-pointer">
+      <li
+        *ngFor="
+          let invoice of filteredInvoices$ | async;
+          trackBy: trackByInvoiceId
+        "
+        class="flex justify-between items-center p-6 rounded-md shadow-md w-full"
         [ngClass]="{
-          'text-lightText': !(isDarkMode$ | async),
-          'text-darkSecondary': isDarkMode$ | async
+          'bg-white': !(isDarkMode$ | async),
+          'bg-darkPrimary': isDarkMode$ | async
         }"
+        (click)="navigateToDetail(invoice.id)"
       >
-        <span
-          [ngClass]="{
-            'text-lightSecondary': !(isDarkMode$ | async),
-            'text-darkSecondary': isDarkMode$ | async
-          }"
-        >
-          #
-        </span>
-        {{ invoice.id }}
-      </div>
-      <div class="hidden md:block text-[#888EB0]">
-        <span>Due</span> {{ invoice.paymentDue }}
-      </div>
-      <div
-        class="truncate w-32"
-        [ngClass]="{
-          'text-lightSecondary': !(isDarkMode$ | async),
-          'text-darkSecondary': isDarkMode$ | async
-        }"
-      >
-        {{ invoice.clientName }}
-      </div>
-      <div class="text-right md:flex md:items-center md:space-x-4">
-        <span class="text-gray-500 block md:hidden">
-          Due {{ invoice.paymentDue }}
-        </span>
-        <span
+        <div
           class="font-bold"
           [ngClass]="{
             'text-lightText': !(isDarkMode$ | async),
             'text-darkSecondary': isDarkMode$ | async
           }"
         >
-          £{{ invoice.total }}
-        </span>
-      </div>
-      <div
-        class="flex items-center justify-center space-x-2 w-[100px] p-1 rounded-lg"
-        [ngClass]="{
-          'bg-[#33d6a044]': invoice.status === 'paid' && !(isDarkMode$ | async),
-          'bg-[#33d6a055]': invoice.status === 'paid' && (isDarkMode$ | async),
-          'bg-[#ff91003e]': invoice.status === 'pending',
-          'bg-[#373b5356]': invoice.status === 'draft'
-        }"
-      >
-        <span
-          class="w-2 h-2 rounded-full"
+          <span
+            [ngClass]="{
+              'text-lightSecondary': !(isDarkMode$ | async),
+              'text-darkSecondary': isDarkMode$ | async
+            }"
+          >
+            #
+          </span>
+          {{ invoice.id }}
+        </div>
+        <div class="hidden md:block text-[#888EB0]">
+          <span>Due</span> {{ invoice.paymentDue }}
+        </div>
+        <div
+          class="truncate w-32"
           [ngClass]="{
-            'bg-[#33D69F]': invoice.status === 'paid',
-            'bg-[#FF8F00]': invoice.status === 'pending',
-            'bg-[#373B53]': invoice.status === 'draft'
-          }"
-        ></span>
-        <span
-          class="font-semibold"
-          [ngClass]="{
-            'text-[#33D69F]': invoice.status === 'paid',
-            'text-[#FF8F00]': invoice.status === 'pending',
-            'text-[#373B53]': invoice.status === 'draft'
+            'text-lightSecondary': !(isDarkMode$ | async),
+            'text-darkSecondary': isDarkMode$ | async
           }"
         >
-          {{ invoice.status | titlecase }}
-        </span>
-      </div>
+          {{ invoice.clientName }}
+        </div>
+        <div class="text-right md:flex md:items-center md:space-x-4">
+          <span class="text-gray-500 block md:hidden">
+            Due {{ invoice.paymentDue }}
+          </span>
+          <span
+            class="font-bold"
+            [ngClass]="{
+              'text-lightText': !(isDarkMode$ | async),
+              'text-darkSecondary': isDarkMode$ | async
+            }"
+          >
+            £{{ invoice.total }}
+          </span>
+        </div>
+        <div
+          class="flex items-center justify-center space-x-2 w-[100px] p-1 rounded-lg"
+          [ngClass]="{
+            'bg-[#33d6a044]':
+              invoice.status === 'paid' && !(isDarkMode$ | async),
+            'bg-[#33d6a055]':
+              invoice.status === 'paid' && (isDarkMode$ | async),
+            'bg-[#ff91003e]': invoice.status === 'pending',
+            'bg-[#373b5356]': invoice.status === 'draft'
+          }"
+        >
+          <span
+            class="w-2 h-2 rounded-full"
+            [ngClass]="{
+              'bg-[#33D69F]': invoice.status === 'paid',
+              'bg-[#FF8F00]': invoice.status === 'pending',
+              'bg-[#373B53]': invoice.status === 'draft'
+            }"
+          ></span>
+          <span
+            class="font-semibold"
+            [ngClass]="{
+              'text-[#33D69F]': invoice.status === 'paid',
+              'text-[#FF8F00]': invoice.status === 'pending',
+              'text-[#373B53]': invoice.status === 'draft'
+            }"
+          >
+            {{ invoice.status | titlecase }}
+          </span>
+        </div>
 
-      <img src="assets/icon-arrow-right.svg" alt="arrow-right" />
-    </li>
-  </ul>
+        <img src="assets/icon-arrow-right.svg" alt="arrow-right" />
+      </li>
+    </ul>
+  </ng-container>
+
+  <!-- Template for NoInvoiceComponent when there are no invoices -->
+  <ng-template #noInvoices>
+    <app-no-invoice></app-no-invoice>
+  </ng-template>
 </div>
 
+<!-- Form Overlay -->
 <div
   [@slideInOut]="showForm ? 'in' : 'out'"
   class="fixed top-0 left-24 h-full bg-black bg-opacity-50 w-full"
@@ -215,5 +230,3 @@
     <app-invoice-form (formClose)="toggleForm()"></app-invoice-form>
   </div>
 </div>
-
-

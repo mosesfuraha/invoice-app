@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalComponent } from './pages/modal/modal.component';
 import { getInitialState } from './pages/invoices/store/initialstate';
 import { LocalStorageSyncEffects } from './pages/invoices/actions/locolstorage.effect';
+import { NoInvoiceComponent } from './pages/invoices/no-invoice/no-invoice.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { LocalStorageSyncEffects } from './pages/invoices/actions/locolstorage.e
     InvoiceFormComponent,
     SidebarComponent,
     ModalComponent,
+    NoInvoiceComponent,
   ],
   imports: [
     BrowserModule,
