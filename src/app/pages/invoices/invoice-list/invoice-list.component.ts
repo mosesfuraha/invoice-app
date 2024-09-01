@@ -98,7 +98,6 @@ export class InvoiceListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-     this.store.dispatch(loadAllInvoices());
     this.getInvoicesFromLocalStorage().subscribe((invoices) => {
       this.invoicesSubject.next(invoices);
     });

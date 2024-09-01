@@ -12,17 +12,19 @@ import { InvoiceActions } from './invoice.types';
 import { select, Store } from '@ngrx/store';
 import * as fromInvoice from './invoice.selectors';
 import { Invoice } from '../../../models/invoice';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Injectable()
 export class InvoiceEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
+  private invoiceService = inject(InvoiceService);
 
   loadInvoices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.loadAllInvoices),
       switchMap(() =>
-        of(this.getInvoicesFromLocalStorage()).pipe(
+        this.invoiceService.findAllInvoices().pipe(
           map((invoices) =>
             InvoiceActions.allInvoicesLoaded({
               invoices: this.formatIds(invoices),
