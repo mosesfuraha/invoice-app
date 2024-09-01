@@ -12,6 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { Invoice } from '../../../models/invoice';
 import { Store } from '@ngrx/store';
+import { loadAllInvoices } from '../actions/invoices.actions';
 
 @Component({
   selector: 'app-invoice-list',
@@ -82,7 +83,6 @@ export class InvoiceListComponent implements OnInit {
   ) {
     this.isDarkMode$ = this.store.select((state) => state.theme.isDarkMode);
 
-    
     this.filteredInvoices$ = combineLatest([
       this.invoicesSubject.asObservable(),
       this.filterSubject.asObservable(),
@@ -98,6 +98,7 @@ export class InvoiceListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+     this.store.dispatch(loadAllInvoices());
     this.getInvoicesFromLocalStorage().subscribe((invoices) => {
       this.invoicesSubject.next(invoices);
     });
