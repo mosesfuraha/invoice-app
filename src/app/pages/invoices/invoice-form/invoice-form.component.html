@@ -16,8 +16,12 @@
         'text-darkSecondary': isDarkMode$ | async
       }"
     >
-      New Invoice
+      <ng-container *ngIf="isEditMode && invoice; else newInvoice">
+        Edit <span class="text-lightAccent">#</span>{{ invoice.id }}
+      </ng-container>
+      <ng-template #newInvoice>New Invoice</ng-template>
     </h2>
+
     <form
       id="invoice-form"
       [formGroup]="invoiceForm"

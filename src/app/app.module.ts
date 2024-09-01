@@ -21,6 +21,7 @@ import { themeReducer } from './theme/theme.reducer';
 import { invoiceReducer } from './pages/invoices/reducers/invoices.reducer';
 import { InvoiceEffects } from './pages/invoices/actions/invoice.effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalComponent } from './pages/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     InvoiceDetailComponent,
     InvoiceFormComponent,
     SidebarComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,

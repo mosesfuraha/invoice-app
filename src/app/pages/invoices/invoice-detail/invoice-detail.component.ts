@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, of } from 'rxjs';
+import { switchMap, map, filter } from 'rxjs/operators';
 import { Invoice } from '../../../models/invoice';
 import { InvoiceState } from '../reducers/invoices.reducer';
 import {
@@ -66,10 +67,12 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   invoice$: Observable<Invoice | undefined> | undefined;
   isDarkMode$: Observable<boolean>;
   showForm = false;
+  showDeleteModal = false;
   private subscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private store: Store<{
       theme: { isDarkMode: boolean };
       invoices: InvoiceState;
@@ -79,28 +82,26 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const invoiceId = this.route.snapshot.paramMap.get('id');
+    this.subscription = this.route.params
+      .pipe(
+        switchMap((params) => {
+          const invoiceId = params['id'];
+          if (invoiceId) {
+            this.store.dispatch(
+              InvoiceActions.getInvoiceById({ id: invoiceId })
+            );
 
-    if (invoiceId) {
-      const localStorageKey = `fetchedInvoice_${invoiceId}`;
-      const savedInvoice = localStorage.getItem(localStorageKey);
-
-      if (savedInvoice) {
-        this.invoice$ = of(JSON.parse(savedInvoice) as Invoice);
-      } else {
-        this.store.dispatch(InvoiceActions.getInvoiceById({ id: invoiceId }));
-
-        this.invoice$ = this.store.select(
-          fromInvoiceSelectors.getInvoiceById(invoiceId)
-        );
-
-        this.subscription = this.invoice$.subscribe((invoice) => {
-          if (invoice) {
-            localStorage.setItem(localStorageKey, JSON.stringify(invoice));
+            return this.store
+              .select(fromInvoiceSelectors.getInvoiceById(invoiceId))
+              .pipe(filter((invoice) => !!invoice));
+          } else {
+            return of(undefined);
           }
-        });
-      }
-    }
+        })
+      )
+      .subscribe((invoice) => {
+        this.invoice$ = of(invoice);
+      });
   }
 
   ngOnDestroy(): void {
@@ -112,13 +113,39 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   toggleForm(): void {
     this.showForm = !this.showForm;
   }
+
   closeForm(): void {
     this.showForm = false;
   }
 
   handleEditForm(updatedInvoice: Invoice): void {
+    // Dispatch edit action and close the form
     this.store.dispatch(
       InvoiceActions.editInvoice({ invoice: updatedInvoice })
     );
+
+    // Close the form after saving changes
+    this.closeForm();
+  }
+
+  openDeleteModal(): void {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+  }
+
+  deleteInvoiceById(): void {
+    if (this.invoice$) {
+      this.invoice$.subscribe((invoice) => {
+        if (invoice && invoice.id) {
+          this.store.dispatch(InvoiceActions.deleteInvoice({ id: invoice.id }));
+
+          this.closeDeleteModal();
+          this.router.navigate(['/']);
+        }
+      });
+    }
   }
 }

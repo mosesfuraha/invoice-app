@@ -92,7 +92,22 @@ export const invoiceReducer = createReducer(
     loading: false,
     error,
   })),
- 
+
+  on(InvoiceActions.deleteInvoice, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+  on(InvoiceActions.deleteInvoiceSuccess, (state, { id }) =>
+    adapter.removeOne(id, { ...state, loading: false, error: null })
+  ),
+
+  on(InvoiceActions.deleteInvoiceFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  }))
 );
 
 export const { selectIds, selectEntities, selectAll, selectTotal } =

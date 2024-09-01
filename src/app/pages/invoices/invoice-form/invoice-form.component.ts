@@ -93,7 +93,6 @@ export class InvoiceFormComponent implements OnInit {
 
   onSubmit() {
     if (this.invoiceForm.valid) {
-      console.log('Form Value:', this.invoiceForm.value);
       const formValue = this.invoiceForm.value;
 
       const invoice: Invoice = {
@@ -131,13 +130,18 @@ export class InvoiceFormComponent implements OnInit {
         total: this.calculateTotal(formValue.items),
       };
 
-      this.store.dispatch(InvoiceActions.addInvoice({ invoice }));
+      if (this.isEditMode) {
+        this.store.dispatch(InvoiceActions.editInvoice({ invoice }));
+      } else {
+        this.store.dispatch(InvoiceActions.addInvoice({ invoice }));
+      }
 
       this.formSubmit.emit(invoice);
       this.formClose.emit();
+
+      window.location.reload();
     } else {
       this.markFormGroupTouched(this.invoiceForm);
-
       console.error('Form is invalid', this.invoiceForm.errors);
     }
   }
