@@ -113,12 +113,10 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   handleEditForm(updatedInvoice: Invoice): void {
-   
     this.store.dispatch(
       InvoiceActions.editInvoice({ invoice: updatedInvoice })
     );
 
-    
     this.closeForm();
   }
 
@@ -137,6 +135,21 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
           this.store.dispatch(InvoiceActions.deleteInvoice({ id: invoice.id }));
           this.closeDeleteModal();
           this.router.navigate(['/']);
+        }
+      });
+    }
+  }
+  markAsPaid(invoiceId: string): void {
+    if (this.invoice$) {
+      this.invoice$.subscribe((invoice) => {
+        if (invoice && invoice.id === invoiceId && invoice.status !== 'paid') {
+          const updatedInvoice = {
+            ...invoice,
+            status: 'paid',
+          };
+          this.store.dispatch(
+            InvoiceActions.editInvoice({ invoice: updatedInvoice })
+          );
         }
       });
     }

@@ -52,7 +52,6 @@
           </div>
         </div>
 
-        <!-- Buttons Container - Position at the bottom on small screens -->
         <div
           class="flex gap-2 items-center max-sm:fixed max-sm:bottom-0 max-sm:left-0 max-sm:w-full max-sm:bg-white max-sm:dark:bg-darkPrimary max-sm:p-4 max-sm:justify-center max-sm:space-x-4"
         >
@@ -68,9 +67,9 @@
           >
             Delete
           </button>
-
           <button
             *ngIf="invoice.status !== 'paid'"
+            (click)="markAsPaid(invoice.id)"
             class="py-2 px-4 rounded-full bg-lightAccent text-white text-sm"
           >
             Mark as Paid
