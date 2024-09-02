@@ -137,7 +137,7 @@ export class InvoiceFormComponent implements OnInit {
       }
 
       this.formSubmit.emit(invoice);
-      this.formClose.emit();
+      this.formClose.emit(); // This line ensures the form closes after saving
     } else {
       this.markFormGroupTouched(this.invoiceForm);
       console.error('Form is invalid', this.invoiceForm.errors);

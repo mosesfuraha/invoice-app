@@ -21,9 +21,19 @@ export class LocalStorageSyncEffects {
         ),
         withLatestFrom(this.store.select(fromInvoiceSelectors.getAllInvoices)),
         tap(([action, invoices]) => {
-          localStorage.setItem('invoices', JSON.stringify(invoices));
+          this.saveInvoicesToLocalStorage(invoices);
         })
       ),
     { dispatch: false }
   );
+
+  private saveInvoicesToLocalStorage(invoices: Invoice[]): void {
+    try {
+      const serializedInvoices = JSON.stringify(invoices);
+      localStorage.setItem('invoices', serializedInvoices);
+      console.log('Invoices successfully synced to local storage:', invoices);
+    } catch (error) {
+      console.error('Failed to sync invoices to local storage:', error);
+    }
+  }
 }

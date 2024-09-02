@@ -4,7 +4,10 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Invoice } from '../../../models/invoice';
 import { Store } from '@ngrx/store';
-import { loadAllInvoices } from '../actions/invoices.actions';
+import {
+  loadAllInvoices,
+  allInvoicesLoaded,
+} from '../actions/invoices.actions';
 import * as fromInvoiceSelectors from '../actions/invoice.selectors';
 import {
   animate,
@@ -104,9 +107,26 @@ export class InvoiceListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadAllInvoices());
+    // Load invoices from local storage
+    const invoicesFromLocalStorage = this.getInvoicesFromLocalStorage();
+
+    if (invoicesFromLocalStorage.length > 0) {
+      // If invoices exist in local storage, dispatch them to the store
+      this.store.dispatch(
+        allInvoicesLoaded({ invoices: invoicesFromLocalStorage })
+      );
+    } else {
+      // If no invoices are found, dispatch the action to load from the service
+      this.store.dispatch(loadAllInvoices());
+    }
 
     this.updateSelectedStatuses();
+  }
+
+  // Method to get invoices from local storage
+  private getInvoicesFromLocalStorage(): Invoice[] {
+    const invoicesJson = localStorage.getItem('invoices');
+    return invoicesJson ? JSON.parse(invoicesJson) : [];
   }
 
   showDropdown(): void {

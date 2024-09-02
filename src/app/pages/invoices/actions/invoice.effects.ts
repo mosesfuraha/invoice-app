@@ -26,6 +26,10 @@ export class InvoiceEffects {
       switchMap(() => {
         return this.invoiceService.findAllInvoices().pipe(
           map((invoices) => {
+            console.log('Fetched Invoices:', invoices);
+
+            this.saveInvoicesToLocalStorage(invoices);
+
             return InvoiceActions.allInvoicesLoaded({ invoices });
           }),
           catchError((error) =>
@@ -103,7 +107,6 @@ export class InvoiceEffects {
       ),
       switchMap(([action, entities]) => {
         if (entities[action.id]) {
-          console.log('Deleting Invoice with ID:', action.id);
           return of(InvoiceActions.deleteInvoiceSuccess({ id: action.id }));
         } else {
           console.error('Invoice not found for deletion:', action.id);
