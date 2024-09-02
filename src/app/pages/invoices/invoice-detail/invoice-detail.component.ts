@@ -32,12 +32,12 @@ import { InvoiceActions } from '../actions/invoice.types';
       state(
         'out',
         style({
-          transform: 'translateX(-50%)', 
+          transform: 'translateX(-50%)',
           opacity: 0,
         })
       ),
       state(
-        'static', 
+        'static',
         style({
           transform: 'none',
           opacity: 1,
@@ -47,13 +47,13 @@ import { InvoiceActions } from '../actions/invoice.types';
         animate(
           '500ms ease-in-out',
           keyframes([
-            style({ transform: 'translateX(-50%)', opacity: 0, offset: 0 }), // Start from -50%
+            style({ transform: 'translateX(-50%)', opacity: 0, offset: 0 }), 
             style({
               transform: 'translateX(-10px)',
               opacity: 0.5,
               offset: 0.8,
-            }), // Slide in slightly to -10px
-            style({ transform: 'translateX(0)', opacity: 1, offset: 1 }), // Finish at 0
+            }), 
+            style({ transform: 'translateX(0)', opacity: 1, offset: 1 }), 
           ])
         ),
       ]),
@@ -61,13 +61,13 @@ import { InvoiceActions } from '../actions/invoice.types';
         animate(
           '400ms ease-in-out',
           keyframes([
-            style({ transform: 'translateX(0)', opacity: 1, offset: 0 }), // Start from 0
+            style({ transform: 'translateX(0)', opacity: 1, offset: 0 }),
             style({
               transform: 'translateX(-10px)',
               opacity: 0.5,
               offset: 0.2,
-            }), 
-            style({ transform: 'translateX(-50%)', opacity: 0, offset: 1 }), // End at -50%
+            }),
+            style({ transform: 'translateX(-50%)', opacity: 0, offset: 1 }),
           ])
         ),
       ]),

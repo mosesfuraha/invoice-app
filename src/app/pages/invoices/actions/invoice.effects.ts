@@ -26,7 +26,7 @@ export class InvoiceEffects {
       switchMap(() => {
         return this.invoiceService.findAllInvoices().pipe(
           map((invoices) => {
-            console.log('Fetched Invoices:', invoices);
+            
 
             this.saveInvoicesToLocalStorage(invoices);
 
@@ -48,7 +48,7 @@ export class InvoiceEffects {
           ...action.invoice,
           id: this.generateUniqueId(),
         };
-        console.log('Adding new Invoice:', newInvoice);
+      
         return of(InvoiceActions.addInvoiceSuccess({ invoice: newInvoice }));
       }),
       catchError((error) =>
@@ -70,7 +70,7 @@ export class InvoiceEffects {
             invoice: this.formatId(invoice),
           });
         } else {
-          console.error('Invoice not found:', action.id);
+         
           return InvoiceActions.getInvoiceByIdFailure({
             error: 'Invoice not found',
           });
@@ -92,12 +92,13 @@ export class InvoiceEffects {
         const existingInvoice = entities[action.invoice.id];
         if (existingInvoice) {
           const updatedInvoice = { ...existingInvoice, ...action.invoice };
-          console.log('Editing Invoice:', updatedInvoice);
+         
           return of(
             InvoiceActions.editInvoiceSuccess({ invoice: updatedInvoice })
           );
         } else {
-          console.error('Invoice not found for editing:', action.invoice.id);
+          
+
           return of(
             InvoiceActions.editInvoiceFailure({
               error: 'Invoice not found in state',
@@ -122,7 +123,7 @@ export class InvoiceEffects {
         if (entities[action.id]) {
           return of(InvoiceActions.deleteInvoiceSuccess({ id: action.id }));
         } else {
-          console.error('Invoice not found for deletion:', action.id);
+          
           return of(
             InvoiceActions.deleteInvoiceFailure({
               error: 'Invoice not found in state',
@@ -147,8 +148,8 @@ export class InvoiceEffects {
         ),
         withLatestFrom(this.store.select(fromInvoiceSelectors.getAllInvoices)),
         tap(([action, invoices]) => {
-          console.log('Syncing with local storage:', invoices);
-          this.saveInvoicesToLocalStorage(invoices); // Sync local storage
+          
+          this.saveInvoicesToLocalStorage(invoices); 
         })
       ),
     { dispatch: false }

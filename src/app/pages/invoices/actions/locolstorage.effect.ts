@@ -31,9 +31,9 @@ export class LocalStorageSyncEffects {
     try {
       const serializedInvoices = JSON.stringify(invoices);
       localStorage.setItem('invoices', serializedInvoices);
-      console.log('Invoices successfully synced to local storage:', invoices);
+     
     } catch (error) {
-      console.error('Failed to sync invoices to local storage:', error);
+      
     }
   }
 }

@@ -191,7 +191,8 @@ export class InvoiceFormComponent implements OnInit {
     const terms = parseInt(paymentTerms.replace(/\D/g, ''), 10) || 0;
     const date = new Date(invoiceDate);
     if (isNaN(date.getTime())) {
-      console.error('Invalid invoice date:', invoiceDate);
+     
+      
       return '';
     }
 
