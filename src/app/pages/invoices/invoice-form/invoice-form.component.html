@@ -3,14 +3,14 @@
   [ngClass]="{ dark: isDarkMode$ | async }"
 >
   <div
-    class="w-[600px] h-full p-6 rounded-tr-lg rounded-br-lg"
+    class="w-full md:w-[600px] h-full p-4 md:p-6 rounded-tr-lg rounded-br-lg"
     [ngClass]="{
       'bg-lightBg': !(isDarkMode$ | async),
       'bg-lightText': isDarkMode$ | async
     }"
   >
     <h2
-      class="text-2xl font-bold mb-4"
+      class="text-2xl font-bold mb-4 md:mb-4"
       [ngClass]="{
         'text-lightText': !(isDarkMode$ | async),
         'text-darkSecondary': isDarkMode$ | async
@@ -25,7 +25,7 @@
     <form
       id="invoice-form"
       [formGroup]="invoiceForm"
-      class="flex flex-col gap-4 overflow-y-auto pr-5 custom-scrollbar h-[360px]"
+      class="flex flex-col gap-4 overflow-y-auto pr-5 custom-scrollbar h-[360px] md:h-[360px]"
     >
       <div class="mb-4">
         <h3
@@ -878,7 +878,7 @@
     </form>
 
     <div
-      class="flex justify-between gap-4 mt-4 shadow-lg p-3 rounded-lg"
+      class="flex flex-col sm:flex-row justify-between gap-4 mt-4 shadow-lg p-3 rounded-lg"
       [ngClass]="{
         'bg-lightBg': !(isDarkMode$ | async),
         'bg-darkPrimary': isDarkMode$ | async
@@ -887,7 +887,7 @@
       <button
         *ngIf="isEditMode"
         (click)="formClose.emit()"
-        class="py-3 px-6 rounded-full hover:bg-opacity-75 transition duration-300"
+        class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
         [ngClass]="{
           'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
           'bg-darkSecondary text-darkText': isDarkMode$ | async
@@ -899,7 +899,7 @@
       <button
         *ngIf="isEditMode"
         (click)="onSubmit()"
-        class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+        class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
         [ngClass]="{
           'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),
           'bg-darkAccent text-darkText': isDarkMode$ | async
@@ -911,7 +911,7 @@
       <ng-container *ngIf="!isEditMode">
         <button
           (click)="formClose.emit()"
-          class="py-3 px-6 rounded-full hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
             'bg-darkSecondary text-darkText': isDarkMode$ | async
@@ -922,7 +922,7 @@
 
         <button
           (click)="onSaveAsDraft()"
-          class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-lightText text-lightSecondary': !(isDarkMode$ | async),
             'bg-darkText text-darkSecondary': isDarkMode$ | async
@@ -933,7 +933,7 @@
 
         <button
           (click)="onSubmit()"
-          class="py-2 px-4 rounded-full hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),
             'bg-darkAccent text-darkText': isDarkMode$ | async

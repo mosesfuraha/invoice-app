@@ -257,13 +257,13 @@
 </div>
 
 <div
-  [@slideInOut]="showForm ? 'in' : 'out'"
-  class="fixed top-0 left-24 h-full bg-black bg-opacity-50 w-full"
+  [@slideInOut]="showForm ? (isLargeScreen ? 'in' : 'static') : 'out'"
+  class="fixed top-0 left-0 md:left-24 h-full bg-black bg-opacity-50 w-full"
   [style.display]="showForm ? 'block' : 'none'"
   (click)="closeForm()"
 >
   <div
-    class="relative max-w-lg p-6 dark:bg-darkPrimary rounded-lg"
+    class="relative max-w-full md:max-w-lg p-4 md:p-6 dark:bg-darkPrimary rounded-lg"
     (click)="$event.stopPropagation()"
   >
     <app-invoice-form

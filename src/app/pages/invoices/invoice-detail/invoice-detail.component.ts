@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, of } from 'rxjs';
@@ -32,17 +32,28 @@ import { InvoiceActions } from '../actions/invoice.types';
       state(
         'out',
         style({
-          transform: 'translateX(-100%)',
+          transform: 'translateX(-50%)', 
           opacity: 0,
+        })
+      ),
+      state(
+        'static', 
+        style({
+          transform: 'none',
+          opacity: 1,
         })
       ),
       transition('out => in', [
         animate(
           '500ms ease-in-out',
           keyframes([
-            style({ transform: 'translateX(-100%)', opacity: 0, offset: 0 }),
-            style({ transform: 'translateX(10px)', opacity: 0.5, offset: 0.8 }),
-            style({ transform: 'translateX(0)', opacity: 1, offset: 1 }),
+            style({ transform: 'translateX(-50%)', opacity: 0, offset: 0 }), // Start from -50%
+            style({
+              transform: 'translateX(-10px)',
+              opacity: 0.5,
+              offset: 0.8,
+            }), // Slide in slightly to -10px
+            style({ transform: 'translateX(0)', opacity: 1, offset: 1 }), // Finish at 0
           ])
         ),
       ]),
@@ -50,13 +61,13 @@ import { InvoiceActions } from '../actions/invoice.types';
         animate(
           '400ms ease-in-out',
           keyframes([
-            style({ transform: 'translateX(0)', opacity: 1, offset: 0 }),
+            style({ transform: 'translateX(0)', opacity: 1, offset: 0 }), // Start from 0
             style({
               transform: 'translateX(-10px)',
               opacity: 0.5,
               offset: 0.2,
-            }),
-            style({ transform: 'translateX(-100%)', opacity: 0, offset: 1 }),
+            }), 
+            style({ transform: 'translateX(-50%)', opacity: 0, offset: 1 }), // End at -50%
           ])
         ),
       ]),
@@ -64,6 +75,7 @@ import { InvoiceActions } from '../actions/invoice.types';
   ],
 })
 export class InvoiceDetailComponent implements OnInit, OnDestroy {
+  isLargeScreen = true;
   invoice$: Observable<Invoice | undefined> | undefined;
   isDarkMode$: Observable<boolean>;
   showForm = false;
@@ -82,6 +94,7 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.invoice$ = this.route.params.pipe(
       switchMap((params) => {
         const invoiceId = params['id'];
@@ -97,7 +110,14 @@ export class InvoiceDetailComponent implements OnInit, OnDestroy {
       })
     );
   }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
 
+  private checkScreenSize() {
+    this.isLargeScreen = window.innerWidth >= 768;
+  }
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
