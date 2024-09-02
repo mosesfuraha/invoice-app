@@ -270,7 +270,6 @@
       *ngIf="invoice$ | async as invoiceData"
       [invoice]="invoiceData"
       [isEditMode]="true"
-      (formClose)="toggleForm()"
       (formSubmit)="handleEditForm($event)"
     ></app-invoice-form>
   </div>

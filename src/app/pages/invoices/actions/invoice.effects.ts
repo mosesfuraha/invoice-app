@@ -57,7 +57,6 @@ export class InvoiceEffects {
     )
   );
 
-  // Get an invoice by ID from the store
   getInvoiceById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.getInvoiceById),
@@ -83,14 +82,28 @@ export class InvoiceEffects {
     )
   );
 
-  // Edit an invoice and update the store
   editInvoice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(InvoiceActions.editInvoice),
-      switchMap((action) => {
-        const { invoice } = action;
-        console.log('Editing Invoice:', invoice);
-        return of(InvoiceActions.editInvoiceSuccess({ invoice }));
+      withLatestFrom(
+        this.store.select(fromInvoiceSelectors.getInvoiceEntities)
+      ),
+      switchMap(([action, entities]) => {
+        const existingInvoice = entities[action.invoice.id];
+        if (existingInvoice) {
+          const updatedInvoice = { ...existingInvoice, ...action.invoice };
+          console.log('Editing Invoice:', updatedInvoice);
+          return of(
+            InvoiceActions.editInvoiceSuccess({ invoice: updatedInvoice })
+          );
+        } else {
+          console.error('Invoice not found for editing:', action.invoice.id);
+          return of(
+            InvoiceActions.editInvoiceFailure({
+              error: 'Invoice not found in state',
+            })
+          );
+        }
       }),
       catchError((error) =>
         of(InvoiceActions.editInvoiceFailure({ error: error.message }))
