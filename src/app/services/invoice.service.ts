@@ -7,7 +7,7 @@ import { Invoice } from '../models/invoice';
   providedIn: 'root',
 })
 export class InvoiceService {
-  private dataUrl = 'assets/data.json';
+  private dataUrl = 'assets/data.json'
 
   constructor(private http: HttpClient) {}
 
