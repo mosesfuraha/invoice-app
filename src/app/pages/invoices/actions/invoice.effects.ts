@@ -24,17 +24,15 @@ export class InvoiceEffects {
     this.actions$.pipe(
       ofType(InvoiceActions.loadAllInvoices),
       switchMap(() => {
-        const invoices = this.getInvoicesFromLocalStorage();
-        const formattedInvoices = this.formatIds(invoices);
-        return of(
-          InvoiceActions.allInvoicesLoaded({
-            invoices: formattedInvoices,
-          })
+        return this.invoiceService.findAllInvoices().pipe(
+          map((invoices) => {
+            return InvoiceActions.allInvoicesLoaded({ invoices });
+          }),
+          catchError((error) =>
+            of(InvoiceActions.loadAllInvoicesFailure({ error: error.message }))
+          )
         );
-      }),
-      catchError((error) =>
-        of(InvoiceActions.loadAllInvoicesFailure({ error: error.message }))
-      )
+      })
     )
   );
 
