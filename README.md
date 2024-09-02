@@ -33,3 +33,4 @@ npm install @ngrx/store @ngrx/effects @ngrx/entity @ngrx/store-devtools
 
 # Serve the application locally
 ng serve
+```
