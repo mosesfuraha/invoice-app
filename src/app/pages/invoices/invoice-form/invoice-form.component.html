@@ -32,7 +32,7 @@
           class="text-xl font-semibold mb-8"
           [ngClass]="{
             'text-lightAccent': !(isDarkMode$ | async),
-            'text-darkAccent': isDarkMode$ | async
+            'text-lightSecondary': isDarkMode$ | async
           }"
         >
           Bill from
@@ -637,9 +637,9 @@
                 invoiceForm.get('paymentTerms')?.touched
               "
             >
-              <option value="net30">Net 30</option>
-              <option value="net60">Net 60</option>
-              <option value="net90">Net 90</option>
+              <option value="net30">Net 30 Days</option>
+              <option value="net60">Net 60 Days</option>
+              <option value="net90">Net 90 Days</option>
             </select>
           </div>
 
@@ -911,7 +911,7 @@
       <ng-container *ngIf="!isEditMode">
         <button
           (click)="formClose.emit()"
-          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-full hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-[#F9FAFE] text-lightAccent': !(isDarkMode$ | async),
             'bg-darkSecondary text-darkText': isDarkMode$ | async
@@ -922,10 +922,10 @@
 
         <button
           (click)="onSaveAsDraft()"
-          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-full hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-lightText text-lightSecondary': !(isDarkMode$ | async),
-            'bg-darkText text-darkSecondary': isDarkMode$ | async
+            'bg-[#373B53] text-darkSecondary': isDarkMode$ | async
           }"
         >
           Save as Draft
@@ -933,10 +933,10 @@
 
         <button
           (click)="onSubmit()"
-          class="py-2 px-4 sm:py-3 sm:px-6 rounded-lg hover:bg-opacity-75 transition duration-300"
+          class="py-2 px-4 sm:py-3 sm:px-6 rounded-full hover:bg-opacity-75 transition duration-300"
           [ngClass]="{
             'bg-[#7C5DFA] text-lightBg': !(isDarkMode$ | async),
-            'bg-darkAccent text-darkText': isDarkMode$ | async
+            'bg-lightAccent text-darkText': isDarkMode$ | async
           }"
         >
           Save & Send

@@ -66,17 +66,30 @@ export class InvoiceFormComponent implements OnInit {
         price: item.price,
         total: item.total,
       });
+      this.updateTotal(itemGroup); // Recalculate totals
       this.items.push(itemGroup);
     });
   }
 
   createItemFormGroup(): FormGroup {
-    return this.formBuilder.group({
+    const group = this.formBuilder.group({
       itemName: ['', Validators.required],
       qty: ['', [Validators.required, Validators.min(1)]],
       price: ['', [Validators.required, Validators.min(0.01)]],
       total: [{ value: '', disabled: true }],
     });
+
+    // Subscribe to changes in qty and price to dynamically calculate total
+    group.get('qty')?.valueChanges.subscribe(() => this.updateTotal(group));
+    group.get('price')?.valueChanges.subscribe(() => this.updateTotal(group));
+
+    return group;
+  }
+
+  updateTotal(group: FormGroup) {
+    const qty = group.get('qty')?.value || 0;
+    const price = group.get('price')?.value || 0;
+    group.get('total')?.setValue(qty * price, { emitEvent: false });
   }
 
   get items() {
@@ -191,8 +204,6 @@ export class InvoiceFormComponent implements OnInit {
     const terms = parseInt(paymentTerms.replace(/\D/g, ''), 10) || 0;
     const date = new Date(invoiceDate);
     if (isNaN(date.getTime())) {
-     
-      
       return '';
     }
 
